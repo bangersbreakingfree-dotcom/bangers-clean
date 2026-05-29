@@ -75,7 +75,4 @@ export async function POST(request: Request) {
     const message = error instanceof Error ? error.message : 'Unable to create checkout session';
     return NextResponse.json({ error: message }, { status: 400 });
   }
-}    const message = error instanceof Error ? error.message : 'Unable to create checkout session';
-    return NextResponse.json({ error: message }, { status: 400 });
-  }
-}
+}    
