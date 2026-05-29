@@ -1,5 +1,6 @@
 'use client';
 
+import Image from 'next/image';
 import { useEffect, useMemo, useState } from 'react';
 import { BillingCycle, planGroups, plans, Tier } from '@/lib/plans';
 import { fallbackContent, SiteContent } from '@/lib/content';
@@ -78,9 +79,13 @@ export default function HomePage() {
             {content.hero_kicker}
           </p>
 
-          <h1 className="text-7xl md:text-[10rem] font-extralight tracking-[0.2em] leading-none mb-8">
-            {content.hero_title}
-          </h1>
+        <div className="mb-8 flex justify-center">
+  <img
+    src="/bangers logo with clouds.png"
+    alt="BANGERS"
+    className="w-full max-w-4xl h-auto"
+  />
+</div>
 
           <p className="max-w-3xl mx-auto text-xl md:text-3xl text-neutral-200 leading-relaxed mb-12 font-light whitespace-pre-line">
             {content.hero_subtitle}
