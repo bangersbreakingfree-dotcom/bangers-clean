@@ -1,3 +1,4 @@
+export const dynamic = 'force-dynamic';
 import { NextResponse } from 'next/server';
 import { fallbackContent } from '@/lib/content';
 import { getSupabaseAdmin } from '@/lib/supabaseAdmin';
