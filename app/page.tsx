@@ -81,10 +81,10 @@ export default function HomePage() {
 
         <div className="mb-8 flex justify-center">
   <img
-    src="/bangers logo with clouds.png"
-    alt="BANGERS"
-    className="w-full max-w-4xl h-auto"
-  />
+  src={content.logo_image_url}
+  alt="BANGERS"
+  className="w-full max-w-4xl h-auto"
+/>
 </div>
 
           <p className="max-w-3xl mx-auto text-xl md:text-3xl text-neutral-200 leading-relaxed mb-12 font-light whitespace-pre-line">
