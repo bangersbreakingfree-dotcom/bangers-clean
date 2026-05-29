@@ -4,7 +4,7 @@ import Image from 'next/image';
 import { useEffect, useMemo, useState } from 'react';
 import { BillingCycle, planGroups, plans, Tier } from '@/lib/plans';
 import { fallbackContent, SiteContent } from '@/lib/content';
-
+import { supabase } from '@/lib/supabaseClient';
 export default function HomePage() {
   const [tier, setTier] = useState<Tier>('adventurer');
   const [billing, setBilling] = useState<BillingCycle>('quarterly');
@@ -31,7 +31,12 @@ export default function HomePage() {
       const response = await fetch('/api/checkout', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ tier, billing, email })
+        body: JSON.stringify({
+  tier,
+  billing,
+  email,
+  userId: (await supabase.auth.getUser()).data.user?.id || ''
+})
       });
 
       const data = await response.json();
