@@ -2,6 +2,7 @@ export type SiteContent = {
   hero_kicker: string; hero_title: string; hero_subtitle: string; hero_image_url: string;
   collector_title: string; collector_location: string; collector_story: string; collector_image_url: string;
   experience_heading: string; experience_text: string; experience_image_url: string;
+logo_image_url: string;
 };
 export const fallbackContent: SiteContent = {
   hero_kicker: 'Exclusive Fine Art Photography Club',
@@ -14,5 +15,7 @@ export const fallbackContent: SiteContent = {
   collector_image_url: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?q=80&w=1974&auto=format&fit=crop',
   experience_heading: 'More than a print.',
   experience_text: 'Every shipment is designed to feel intentional, cinematic, and personal. Prints are produced in-house using archival fine art materials, carefully packaged, and shipped directly from the studio.',
-  experience_image_url: 'https://images.unsplash.com/photo-1510798831971-661eb04b3739?q=80&w=1974&auto=format&fit=crop'
+  experience_image_url: 'https://images.unsplash.com/photo-1510798831971-661eb04b3739?q=80&w=1974&auto=format&fit=crop',
+
+logo_image_url: '/bangers logo with clouds.png'
 };
