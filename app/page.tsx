@@ -28,16 +28,18 @@ export default function HomePage() {
     setLoading(true);
 
     try {
-      const response = await fetch('/api/checkout', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-  tier,
-  billing,
-  email,
-  userId: (await supabase.auth.getUser()).data.user?.id || ''
-})
-      });
+      const { data: userData } = await supabase.auth.getUser();
+
+const response = await fetch('/api/checkout', {
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify({
+    tier,
+    billing,
+    email: userData.user?.email || email,
+    userId: userData.user?.id || ''
+  })
+});
 
       const data = await response.json();
 
