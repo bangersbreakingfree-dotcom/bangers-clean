@@ -25,22 +25,22 @@ export async function POST(request: Request) {
     const session = await stripe.checkout.sessions.create({
       mode: 'subscription',
       line_items: [
-  { price: priceId, quantity: 1 },
-  {
-    price_data: {
-      currency: 'usd',
-      product_data: {
-        name: 'US Shipping',
-      },
-      unit_amount: 999,
-      recurring: {
-        interval: plan.billing === 'quarterly' ? 'month' : 'year',
-        interval_count: plan.billing === 'quarterly' ? 3 : 1,
-      },
-    },
-    quantity: 1,
-  },
-],
+        { price: priceId, quantity: 1 },
+        {
+          price_data: {
+            currency: 'usd',
+            product_data: {
+              name: 'US Shipping',
+            },
+            unit_amount: 999,
+            recurring: {
+              interval: plan.billing === 'quarterly' ? 'month' : 'year',
+              interval_count: plan.billing === 'quarterly' ? 3 : 1,
+            },
+          },
+          quantity: 1,
+        },
+      ],
       customer_email: body.email || undefined,
       billing_address_collection: 'required',
       shipping_address_collection: { allowed_countries: ['US'] },
@@ -50,16 +50,32 @@ export async function POST(request: Request) {
       cancel_url: `${siteUrl}/#membership`,
       metadata: {
         brand: 'BANGERS',
+        userId: body.userId || '',
+        email: body.email || '',
         tier: plan.tier,
         membershipName: plan.name,
         printSize: plan.size,
-        billingCycle: plan.billing
-      }
+        billingCycle: plan.billing,
+      },
+      subscription_data: {
+        metadata: {
+          brand: 'BANGERS',
+          userId: body.userId || '',
+          email: body.email || '',
+          tier: plan.tier,
+          membershipName: plan.name,
+          printSize: plan.size,
+          billingCycle: plan.billing,
+        },
+      },
     });
 
     return NextResponse.json({ url: session.url });
   } catch (error) {
     const message = error instanceof Error ? error.message : 'Unable to create checkout session';
+    return NextResponse.json({ error: message }, { status: 400 });
+  }
+}    const message = error instanceof Error ? error.message : 'Unable to create checkout session';
     return NextResponse.json({ error: message }, { status: 400 });
   }
 }
