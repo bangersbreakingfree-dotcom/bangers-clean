@@ -24,12 +24,13 @@ export async function POST(request: Request) {
     if (!process.env.ADMIN_PASSWORD || String(form.get('password')||'') !== process.env.ADMIN_PASSWORD) return NextResponse.json({error:'Invalid admin password.'},{status:401});
     const supabase = getSupabaseAdmin();
     if (!supabase) return NextResponse.json({error:'Supabase is not connected.'},{status:400});
-    const heroFile=form.get('hero_image') as File|null, collectorFile=form.get('collector_image') as File|null, experienceFile=form.get('experience_image') as File|null;
+ const heroFile=form.get('hero_image') as File|null, collectorFile=form.get('collector_image') as File|null, experienceFile=form.get('experience_image') as File|null, logoFile=form.get('logo_image') as File|null;
     const payload:any={id:'home', updated_at:new Date().toISOString()};
-    for (const key of ['hero_kicker','hero_title','hero_subtitle','hero_image_url','collector_title','collector_location','collector_story','collector_image_url','experience_heading','experience_text','experience_image_url']) payload[key]=String(form.get(key)||'');
+    for (const key of ['hero_kicker','hero_title','hero_subtitle','hero_image_url','logo_image_url','collector_title','collector_location','collector_story','collector_image_url','experience_heading','experience_text','experience_image_url']) payload[key]=String(form.get(key)||'');
     if (heroFile && heroFile.size>0) payload.hero_image_url=await uploadImage(heroFile,'hero');
     if (collectorFile && collectorFile.size>0) payload.collector_image_url=await uploadImage(collectorFile,'collector');
     if (experienceFile && experienceFile.size>0) payload.experience_image_url=await uploadImage(experienceFile,'experience');
+    if (logoFile && logoFile.size>0) payload.logo_image_url=await uploadImage(logoFile,'logo');
     const { error } = await supabase.from('site_content').upsert(payload,{onConflict:'id'});
     if (error) return NextResponse.json({error:error.message},{status:400});
     return NextResponse.json({ok:true, content:payload});
