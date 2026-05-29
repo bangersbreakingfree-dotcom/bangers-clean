@@ -24,7 +24,23 @@ export async function POST(request: Request) {
 
     const session = await stripe.checkout.sessions.create({
       mode: 'subscription',
-      line_items: [{ price: priceId, quantity: 1 }],
+      line_items: [
+  { price: priceId, quantity: 1 },
+  {
+    price_data: {
+      currency: 'usd',
+      product_data: {
+        name: 'US Shipping',
+      },
+      unit_amount: 999,
+      recurring: {
+        interval: plan.billing === 'quarterly' ? 'month' : 'year',
+        interval_count: plan.billing === 'quarterly' ? 3 : 1,
+      },
+    },
+    quantity: 1,
+  },
+],
       customer_email: body.email || undefined,
       billing_address_collection: 'required',
       shipping_address_collection: { allowed_countries: ['US'] },
