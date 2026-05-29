@@ -27,12 +27,6 @@ export async function POST(request: Request) {
       customer_email: body.email || undefined,
       billing_address_collection: 'required',
       shipping_address_collection: { allowed_countries: ['US'] },
-      shipping_options: [{
-        shipping_rate_data: {
-          type: 'fixed_amount',
-          fixed_amount: { amount: 999, currency: 'usd' },
-          display_name: 'US Shipping'
-        }
       }],
       allow_promotion_codes: true,
       submit_type: 'subscribe',
