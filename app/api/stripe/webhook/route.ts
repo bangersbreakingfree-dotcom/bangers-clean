@@ -11,6 +11,7 @@ async function syncSubscription(subscription: Stripe.Subscription) {
   if (!supabase) throw new Error('Supabase is not connected.');
 
   const userId = subscription.metadata.userId;
+  console.log('SUBSCRIPTION METADATA', subscription.metadata);
   const email = subscription.metadata.email;
 
   if (!userId) return;
