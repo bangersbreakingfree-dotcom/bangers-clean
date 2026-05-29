@@ -1,0 +1,3 @@
+To make the homepage read from admin content, app/page.tsx must call /api/content and replace hard-coded image/text values with the returned content.
+
+Because your current page has already been edited live, the safest way is to do this together in the next step instead of overwriting the whole homepage blindly.

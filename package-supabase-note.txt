@@ -1,0 +1,10 @@
+IMPORTANT: In package.json add this dependency under dependencies:
+
+"@supabase/supabase-js": "2.49.1",
+
+Example:
+"dependencies": {
+  "@supabase/supabase-js": "2.49.1",
+  "next": "14.2.23",
+  ...
+}
