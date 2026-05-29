@@ -15,6 +15,7 @@ export async function POST(request: Request) {
     if (!plan) return NextResponse.json({ error: 'Invalid plan selected.' }, { status: 400 });
 
     const priceId = process.env[plan.priceEnv];
+
     if (!priceId || priceId.includes('replace_me')) {
       return NextResponse.json({ error: `Missing Stripe Price ID for ${plan.name}.` }, { status: 400 });
     }
@@ -27,7 +28,6 @@ export async function POST(request: Request) {
       customer_email: body.email || undefined,
       billing_address_collection: 'required',
       shipping_address_collection: { allowed_countries: ['US'] },
-      }],
       allow_promotion_codes: true,
       submit_type: 'subscribe',
       success_url: `${siteUrl}/success?session_id={CHECKOUT_SESSION_ID}`,
