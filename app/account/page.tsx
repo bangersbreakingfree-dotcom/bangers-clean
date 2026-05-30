@@ -20,7 +20,7 @@ export default function AccountPage() {
       const { data: profile } = await supabase
   .from('customer_profiles')
   .select('subscription_status')
-  .eq('id', data.user.id)
+  .eq('email', data.user.email)
   .single();
 
       setSubscriptionStatus(profile?.subscription_status ?? null);
