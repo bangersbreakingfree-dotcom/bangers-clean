@@ -75,12 +75,19 @@ export default function AccountPage() {
     setUserEmail(null);
   }
 
-  if (userEmail) {
-    return (
-      <main className="min-h-screen bg-black text-white px-6 py-20">
-        <section className="max-w-3xl mx-auto">
-          <h1 className="text-5xl font-extralight mb-6">Your Account</h1>
-          <p className="text-neutral-300 mb-8">Signed in as {userEmail}</p>
+ if (userEmail) {
+  return (
+    <main className="min-h-screen bg-black text-white px-6 py-20">
+      <section className="max-w-3xl mx-auto">
+        <a
+          href="/"
+          className="inline-flex mb-8 border border-white/20 px-5 py-2 rounded-xl hover:bg-white hover:text-black transition"
+        >
+          ← Back to Home
+        </a>
+
+        <h1 className="text-5xl font-extralight mb-6">Your Account</h1>
+        <p className="text-neutral-300 mb-8">Signed in as {userEmail}</p>
 
           <div className="bg-neutral-950 border border-white/10 rounded-[2rem] p-8">
             <h2 className="text-3xl font-extralight mb-4">Subscription</h2>
