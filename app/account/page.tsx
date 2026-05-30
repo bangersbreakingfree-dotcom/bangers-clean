@@ -9,7 +9,10 @@ export default function AccountPage() {
   const [message, setMessage] = useState('');
   const [userEmail, setUserEmail] = useState<string | null>(null);
   const [subscriptionStatus, setSubscriptionStatus] = useState<string | null>(null);
-
+  const [planName, setPlanName] = useState<string | null>(null);
+  const [printSize, setPrintSize] = useState<string | null>(null);
+  const [nextChargeDate, setNextChargeDate] = useState<string | null>(null);
+  
   useEffect(() => {
   async function loadUser() {
     const { data } = await supabase.auth.getUser();
@@ -26,6 +29,9 @@ export default function AccountPage() {
 const profile = await response.json();
 
 setSubscriptionStatus(profile?.subscription_status ?? null);
+setPlanName(profile?.plan_name ?? null);
+setPrintSize(profile?.print_size ?? null);
+setNextChargeDate(profile?.current_period_end ?? null);
     }
   }
 
@@ -105,7 +111,7 @@ setSubscriptionStatus(profile?.subscription_status ?? null);
 
         <h1 className="text-5xl font-extralight mb-6">Your Account</h1>
         <p className="text-neutral-300 mb-8">Signed in as {userEmail}</p>
-<div className="grid md:grid-cols-3 gap-4 mb-8">
+<div className="grid md:grid-cols-5 gap-4 mb-8">
   <div className="bg-neutral-950 border border-white/10 rounded-2xl p-5">
     <p className="text-neutral-500 uppercase tracking-[0.2em] text-xs mb-3">
       Membership Status
@@ -118,18 +124,43 @@ setSubscriptionStatus(profile?.subscription_status ?? null);
   </div>
 
   <div className="bg-neutral-950 border border-white/10 rounded-2xl p-5">
-    <p className="text-neutral-500 uppercase tracking-[0.2em] text-xs mb-3">
-      Next Release
-    </p>
-    <p className="text-2xl font-extralight">July 1, 2026</p>
-  </div>
+  <p className="text-neutral-500 uppercase tracking-[0.2em] text-xs mb-3">
+    Membership
+  </p>
+  <p className="text-2xl font-extralight">
+    {planName || '—'}
+  </p>
+</div>
 
   <div className="bg-neutral-950 border border-white/10 rounded-2xl p-5">
-    <p className="text-neutral-500 uppercase tracking-[0.2em] text-xs mb-3">
-      Enrollment Closes
-    </p>
-    <p className="text-2xl font-extralight">June 15</p>
-  </div>
+  <p className="text-neutral-500 uppercase tracking-[0.2em] text-xs mb-3">
+    Print Size
+  </p>
+  <p className="text-2xl font-extralight">
+    {printSize || '—'}
+  </p>
+</div>
+  <div className="bg-neutral-950 border border-white/10 rounded-2xl p-5">
+  <p className="text-neutral-500 uppercase tracking-[0.2em] text-xs mb-3">
+    Next Charge Date
+  </p>
+  <p className="text-2xl font-extralight">
+    {nextChargeDate
+      ? new Date(nextChargeDate).toLocaleDateString('en-US', {
+          month: 'long',
+          day: 'numeric',
+          year: 'numeric',
+        })
+      : '—'}
+  </p>
+</div>
+  <div className="bg-neutral-950 border border-white/10 rounded-2xl p-5">
+  <p className="text-neutral-500 uppercase tracking-[0.2em] text-xs mb-3">
+    Next Shipment Date
+  </p>
+  <p className="text-2xl font-extralight">
+    July 1, 2026
+  </p>
 </div>
           <div className="bg-neutral-950 border border-white/10 rounded-[2rem] p-8">
             <h2 className="text-3xl font-extralight mb-4">Subscription</h2>
