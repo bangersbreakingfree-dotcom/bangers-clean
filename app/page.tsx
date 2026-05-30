@@ -29,7 +29,6 @@ export default function HomePage() {
 
     try {
       const { data: userData } = await supabase.auth.getUser();
-alert(`User ID: ${userData.user?.id || 'NO USER FOUND'}`);
 const response = await fetch('/api/checkout', {
   method: 'POST',
   headers: { 'Content-Type': 'application/json' },
