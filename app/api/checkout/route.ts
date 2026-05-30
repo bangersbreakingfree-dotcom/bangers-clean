@@ -82,7 +82,12 @@ console.log('CHECKOUT SUBSCRIPTION METADATA', {
 
     return NextResponse.json({ url: session.url });
   } catch (error) {
-    const message = error instanceof Error ? error.message : 'Unable to create checkout session';
-    return NextResponse.json({ error: message }, { status: 400 });
-  }
-}    
+  console.error('CHECKOUT ERROR:', error);
+
+  const message =
+    error instanceof Error
+      ? error.message
+      : 'Unable to create checkout session';
+
+  return NextResponse.json({ error: message }, { status: 400 });
+}
