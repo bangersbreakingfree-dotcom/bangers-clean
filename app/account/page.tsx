@@ -88,7 +88,28 @@ export default function AccountPage() {
 
         <h1 className="text-5xl font-extralight mb-6">Your Account</h1>
         <p className="text-neutral-300 mb-8">Signed in as {userEmail}</p>
+<div className="grid md:grid-cols-3 gap-4 mb-8">
+  <div className="bg-neutral-950 border border-white/10 rounded-2xl p-5">
+    <p className="text-neutral-500 uppercase tracking-[0.2em] text-xs mb-3">
+      Membership Status
+    </p>
+    <p className="text-2xl font-extralight">Active</p>
+  </div>
 
+  <div className="bg-neutral-950 border border-white/10 rounded-2xl p-5">
+    <p className="text-neutral-500 uppercase tracking-[0.2em] text-xs mb-3">
+      Next Release
+    </p>
+    <p className="text-2xl font-extralight">July 1, 2026</p>
+  </div>
+
+  <div className="bg-neutral-950 border border-white/10 rounded-2xl p-5">
+    <p className="text-neutral-500 uppercase tracking-[0.2em] text-xs mb-3">
+      Enrollment Closes
+    </p>
+    <p className="text-2xl font-extralight">June 15</p>
+  </div>
+</div>
           <div className="bg-neutral-950 border border-white/10 rounded-[2rem] p-8">
             <h2 className="text-3xl font-extralight mb-4">Subscription</h2>
 
