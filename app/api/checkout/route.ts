@@ -91,3 +91,4 @@ console.log('CHECKOUT SUBSCRIPTION METADATA', {
 
   return NextResponse.json({ error: message }, { status: 400 });
 }
+}
