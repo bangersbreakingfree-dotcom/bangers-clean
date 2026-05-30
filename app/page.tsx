@@ -70,6 +70,7 @@ export default function HomePage() {
             <a href="#membership" className="hover:text-white transition">Membership</a>
             <a href="#experience" className="hover:text-white transition">Experience</a>
             <a href="#faq" className="hover:text-white transition">FAQ</a>
+            <a href="/account" className="hover:text-white transition">Account</a>
           </nav>
 
           <a href="#membership" className="border border-white/20 px-5 py-2 rounded-xl hover:bg-white hover:text-black transition">Join</a>
