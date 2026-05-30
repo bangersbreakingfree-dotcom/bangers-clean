@@ -1,7 +1,7 @@
 'use client';
 
 import Image from 'next/image';
-import ReleaseCountdown from '@/components/ReleaseCountdown';
+import ReleaseCountdown from '../components/ReleaseCountdown';
 import { useEffect, useMemo, useState } from 'react';
 import { BillingCycle, planGroups, plans, Tier } from '@/lib/plans';
 import { fallbackContent, SiteContent } from '@/lib/content';
