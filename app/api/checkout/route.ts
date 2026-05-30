@@ -11,15 +11,6 @@ export async function POST(request: Request) {
     const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, { apiVersion: '2024-06-20' });
     const body = await request.json();
     console.log('CHECKOUT BODY', body);
-console.log('CHECKOUT SUBSCRIPTION METADATA', {
-  brand: 'BANGERS',
-  userId: body.userId || '',
-  email: body.email || '',
-  tier: plan.tier,
-  membershipName: plan.name,
-  printSize: plan.size,
-  billingCycle: plan.billing,
-});
     const plan = plans.find((item) => item.tier === body.tier && item.billing === body.billing);
 
     if (!plan) return NextResponse.json({ error: 'Invalid plan selected.' }, { status: 400 });
