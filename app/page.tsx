@@ -246,7 +246,17 @@ export default function HomePage() {
                     <span>{selectedPlan.name}</span>
                     <span>{selectedPlan.size}</span>
                   </div>
+<div className="bg-white/5 border border-white/10 rounded-2xl p-5 mb-6">
+  <p className="text-white text-lg font-light mb-3">
+    You will not be charged today.
+  </p>
 
+  <p className="text-neutral-400 text-sm leading-relaxed">
+    Your membership reserves a spot in the next available BANGERS quarterly release.
+    Enrollment closes 15 days before each release. Billing occurs on the upcoming
+    release date, and your first print ships at the same time.
+  </p>
+</div>
                   <button
                     onClick={subscribe}
                     disabled={loading}
