@@ -11,15 +11,59 @@ export default function HomePage() {
   const [email, setEmail] = useState('');
   const [loading, setLoading] = useState(false);
   const [content, setContent] = useState<SiteContent>(fallbackContent);
-const nextRelease = 'April 1, 2026';
-const enrollmentCloses = 'March 15, 2026';
+  
+  const releaseSchedule = [
+  { enrollmentClose: new Date('2026-06-15T23:59:59'), releaseDate: new Date('2026-07-01T00:00:00') },
+  { enrollmentClose: new Date('2026-09-15T23:59:59'), releaseDate: new Date('2026-10-01T00:00:00') },
+  { enrollmentClose: new Date('2026-12-15T23:59:59'), releaseDate: new Date('2027-01-01T00:00:00') },
+  { enrollmentClose: new Date('2027-03-15T23:59:59'), releaseDate: new Date('2027-04-01T00:00:00') }
+];
+
+const [now, setNow] = useState(new Date());
+
+useEffect(() => {
+  const timer = setInterval(() => setNow(new Date()), 1000);
+  return () => clearInterval(timer);
+}, []);
+
+const currentRelease =
+  releaseSchedule.find((release) => now <= release.releaseDate) || releaseSchedule[0];
+
+const enrollmentOpen = now <= currentRelease.enrollmentClose;
+const inProduction = now > currentRelease.enrollmentClose && now < currentRelease.releaseDate;
+
+const timeTarget = enrollmentOpen ? currentRelease.enrollmentClose : currentRelease.releaseDate;
+const timeLeft = Math.max(timeTarget.getTime() - now.getTime(), 0);
+
+const days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
+const hours = Math.floor((timeLeft / (1000 * 60 * 60)) % 24);
+const minutes = Math.floor((timeLeft / (1000 * 60)) % 60);
+
   useEffect(() => {
     fetch('/api/content', { cache: 'no-store' })
       .then((res) => res.json())
       .then((data) => setContent({ ...fallbackContent, ...data }))
       .catch(() => setContent(fallbackContent));
   }, []);
+useEffect(() => {
+  const timer = setInterval(() => {
+    setNow(new Date());
+  }, 1000);
 
+  return () => clearInterval(timer);
+}, []);step 2 
+  const currentRelease =
+  releaseSchedule.find((release) => now <= release.releaseDate) || releaseSchedule[0];
+
+const enrollmentOpen = now <= currentRelease.enrollmentClose;
+const inProduction = now > currentRelease.enrollmentClose && now < currentRelease.releaseDate;
+
+const timeTarget = enrollmentOpen ? currentRelease.enrollmentClose : currentRelease.releaseDate;
+const timeLeft = Math.max(timeTarget.getTime() - now.getTime(), 0);
+
+const days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
+const hours = Math.floor((timeLeft / (1000 * 60 * 60)) % 24);
+const minutes = Math.floor((timeLeft / (1000 * 60)) % 60);
   const selectedPlan = useMemo(
     () => plans.find((plan) => plan.tier === tier && plan.billing === billing)!,
     [tier, billing]
@@ -106,16 +150,50 @@ const enrollmentCloses = 'March 15, 2026';
           </p>
 <div className="max-w-3xl mx-auto mb-10 bg-black/40 backdrop-blur-md border border-white/10 rounded-[2rem] p-6">
   <p className="uppercase tracking-[0.3em] text-xs text-neutral-400 mb-3">
+  <p className="uppercase tracking-[0.3em] text-xs text-neutral-400 mb-3">
     Next BANGERS Release
   </p>
 
   <p className="text-3xl md:text-5xl font-extralight mb-3">
-    July 1, 2026
+    {currentRelease.releaseDate.toLocaleDateString('en-US', {
+      month: 'long',
+      day: 'numeric',
+      year: 'numeric'
+    })}
   </p>
 
-  <p className="text-neutral-400 text-lg">
-  Enrollment closes June 15, 2026
-</p>
+  {enrollmentOpen ? (
+    <div>
+      <p className="text-neutral-400 text-lg mb-4">
+        Enrollment closes in
+      </p>
+
+      <div className="grid grid-cols-3 gap-3 max-w-md mx-auto">
+        <div className="bg-white/5 border border-white/10 rounded-xl p-3">
+          <p className="text-2xl font-light">{days}</p>
+          <p className="text-xs uppercase tracking-widest text-neutral-500">Days</p>
+        </div>
+
+        <div className="bg-white/5 border border-white/10 rounded-xl p-3">
+          <p className="text-2xl font-light">{hours}</p>
+          <p className="text-xs uppercase tracking-widest text-neutral-500">Hours</p>
+        </div>
+
+        <div className="bg-white/5 border border-white/10 rounded-xl p-3">
+          <p className="text-2xl font-light">{minutes}</p>
+          <p className="text-xs uppercase tracking-widest text-neutral-500">Minutes</p>
+        </div>
+      </div>
+    </div>
+  ) : inProduction ? (
+    <p className="text-neutral-400 text-lg">
+      Enrollment is closed. This release is currently in production.
+    </p>
+  ) : (
+    <p className="text-neutral-400 text-lg">
+      Release ships today.
+    </p>
+  )}
 </div>
           <div className="flex flex-col sm:flex-row gap-5 justify-center">
             <a href="#membership" className="bg-white text-black px-10 py-5 rounded-2xl text-lg font-medium hover:scale-105 transition duration-300 shadow-2xl">
