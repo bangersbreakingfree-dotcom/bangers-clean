@@ -79,7 +79,7 @@ export default function HomePage() {
       }
 
       window.location.href = data.url;
-    } catch (error) {
+       } catch (error) {
       alert(
         error instanceof Error
           ? error.message
@@ -87,6 +87,7 @@ export default function HomePage() {
       );
       setLoading(false);
     }
+  }
 
   return (
     <main className="bg-black text-white min-h-screen overflow-hidden">
