@@ -2,23 +2,49 @@
 
 import { useEffect, useState } from 'react';
 
-const releases = [
-  { close: new Date('2026-06-15T23:59:59'), release: new Date('2026-07-01T00:00:00'), end: new Date('2026-07-01T23:59:59') },
-  { close: new Date('2026-09-15T23:59:59'), release: new Date('2026-10-01T00:00:00'), end: new Date('2026-10-01T23:59:59') },
-  { close: new Date('2026-12-15T23:59:59'), release: new Date('2027-01-01T00:00:00'), end: new Date('2027-01-01T23:59:59') },
-  { close: new Date('2027-03-15T23:59:59'), release: new Date('2027-04-01T00:00:00'), end: new Date('2027-04-01T23:59:59') },
-];
+function getUpcomingRelease(now: Date) {
+  const year = now.getFullYear();
+
+  const schedule = [
+    { closeMonth: 2, closeDay: 15, releaseMonth: 3, releaseDay: 1 },
+    { closeMonth: 5, closeDay: 15, releaseMonth: 6, releaseDay: 1 },
+    { closeMonth: 8, closeDay: 15, releaseMonth: 9, releaseDay: 1 },
+    { closeMonth: 11, closeDay: 15, releaseMonth: 0, releaseDay: 1, releaseYearOffset: 1 }
+  ];
+
+  for (const item of schedule) {
+    const releaseYear = year + (item.releaseYearOffset || 0);
+
+    const close = new Date(year, item.closeMonth, item.closeDay, 23, 59, 59);
+    const release = new Date(releaseYear, item.releaseMonth, item.releaseDay, 0, 0, 0);
+    const end = new Date(releaseYear, item.releaseMonth, item.releaseDay, 23, 59, 59);
+
+    if (now <= end) {
+      return { close, release, end };
+    }
+  }
+
+  return {
+    close: new Date(year + 1, 2, 15, 23, 59, 59),
+    release: new Date(year + 1, 3, 1, 0, 0, 0),
+    end: new Date(year + 1, 3, 1, 23, 59, 59)
+  };
+}
 
 export default function ReleaseCountdown() {
   const [now, setNow] = useState<Date | null>(null);
 
   useEffect(() => {
     setNow(new Date());
-    const timer = setInterval(() => setNow(new Date()), 1000);
+
+    const timer = setInterval(() => {
+      setNow(new Date());
+    }, 1000);
+
     return () => clearInterval(timer);
   }, []);
 
-  const current = releases.find((item) => !now || now <= item.end) || releases[0];
+  const current = getUpcomingRelease(now || new Date());
 
   const enrollmentOpen = !now || now <= current.close;
   const releaseDay = now && now >= current.release && now <= current.end;
@@ -41,7 +67,7 @@ export default function ReleaseCountdown() {
         {current.release.toLocaleDateString('en-US', {
           month: 'long',
           day: 'numeric',
-          year: 'numeric',
+          year: 'numeric'
         })}
       </p>
 
@@ -54,13 +80,13 @@ export default function ReleaseCountdown() {
       ) : (
         <>
           <p className="text-neutral-400 text-lg mb-4">
-  Enrollment closes on{' '}
-  {current.close.toLocaleDateString('en-US', {
-    month: 'long',
-    day: 'numeric'
-  })}{' '}
-  in
-</p>
+            Enrollment closes on{' '}
+            {current.close.toLocaleDateString('en-US', {
+              month: 'long',
+              day: 'numeric'
+            })}{' '}
+            in
+          </p>
 
           <div className="grid grid-cols-3 gap-3 max-w-md mx-auto">
             <div className="bg-white/5 border border-white/10 rounded-xl p-3">
@@ -78,6 +104,11 @@ export default function ReleaseCountdown() {
               <p className="text-xs uppercase tracking-widest text-neutral-500">Minutes</p>
             </div>
           </div>
+        </>
+      )}
+    </div>
+  );
+}          </div>
         </>
       )}
     </div>
