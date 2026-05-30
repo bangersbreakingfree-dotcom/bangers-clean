@@ -17,14 +17,13 @@ export default function AccountPage() {
     setUserEmail(data.user?.email ?? null);
 
     if (data.user?.email) {
-      const { data: profile, error } = await supabase
-  .from('customer_profiles')
-  .select('subscription_status')
-  .eq('email', data.user.email)
-  .single();
+      const response = await fetch('/api/account-profile', {
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify({ email: data.user.email }),
+});
 
-console.log('PROFILE RESULT', profile);
-console.log('PROFILE ERROR', error);
+const profile = await response.json();
 
 setSubscriptionStatus(profile?.subscription_status ?? null);
     }
