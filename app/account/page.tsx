@@ -3,39 +3,17 @@
 import { useEffect, useState } from 'react';
 import { supabase } from '@/lib/supabaseClient';
 
-type CustomerProfile = {
-  subscription_status: string | null;
-  plan_name: string | null;
-  print_size: string | null;
-  current_period_end: string | null;
-};
 export default function AccountPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [message, setMessage] = useState('');
   const [userEmail, setUserEmail] = useState<string | null>(null);
-  const [profile, setProfile] = useState<CustomerProfile | null>(null);
-  
+
   useEffect(() => {
-  async function loadAccount() {
-    const { data } = await supabase.auth.getUser();
-    const user = data.user;
-
-    setUserEmail(user?.email ?? null);
-
-    if (user?.email) {
-      const { data: profileData } = await supabase
-        .from('customer_profiles')
-        .select('subscription_status, plan_name, print_size, current_period_end')
-        .eq('email', user.email)
-        .single();
-
-      setProfile(profileData);
-    }
-  }
-
-  loadAccount();
-}, []);
+    supabase.auth.getUser().then(({ data }) => {
+      setUserEmail(data.user?.email ?? null);
+    });
+  }, []);
 
   async function login(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -110,53 +88,13 @@ export default function AccountPage() {
 
         <h1 className="text-5xl font-extralight mb-6">Your Account</h1>
         <p className="text-neutral-300 mb-8">Signed in as {userEmail}</p>
-<div className="grid md:grid-cols-4 gap-4 mb-8">
+<div className="grid md:grid-cols-3 gap-4 mb-8">
   <div className="bg-neutral-950 border border-white/10 rounded-2xl p-5">
     <p className="text-neutral-500 uppercase tracking-[0.2em] text-xs mb-3">
       Membership Status
     </p>
-    <p className="text-2xl font-extralight">
-      {profile?.subscription_status === 'trialing'
-        ? 'Reserved'
-        : profile?.subscription_status
-        ? profile.subscription_status
-        : 'No Membership'}
-    </p>
+    <p className="text-2xl font-extralight">Active</p>
   </div>
-
-  <div className="bg-neutral-950 border border-white/10 rounded-2xl p-5">
-    <p className="text-neutral-500 uppercase tracking-[0.2em] text-xs mb-3">
-      Current Tier
-    </p>
-    <p className="text-2xl font-extralight">
-      {profile?.plan_name || 'Not Subscribed'}
-    </p>
-  </div>
-
-  <div className="bg-neutral-950 border border-white/10 rounded-2xl p-5">
-    <p className="text-neutral-500 uppercase tracking-[0.2em] text-xs mb-3">
-      Print Size
-    </p>
-    <p className="text-2xl font-extralight">
-      {profile?.print_size || '—'}
-    </p>
-  </div>
-
-  <div className="bg-neutral-950 border border-white/10 rounded-2xl p-5">
-    <p className="text-neutral-500 uppercase tracking-[0.2em] text-xs mb-3">
-      First Charge
-    </p>
-    <p className="text-2xl font-extralight">
-      {profile?.current_period_end
-        ? new Date(profile.current_period_end).toLocaleDateString('en-US', {
-            month: 'long',
-            day: 'numeric',
-            year: 'numeric',
-          })
-        : '—'}
-    </p>
-  </div>
-</div>
 
   <div className="bg-neutral-950 border border-white/10 rounded-2xl p-5">
     <p className="text-neutral-500 uppercase tracking-[0.2em] text-xs mb-3">
