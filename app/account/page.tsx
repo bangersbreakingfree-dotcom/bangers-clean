@@ -98,21 +98,6 @@ export default function AccountPage() {
     await supabase.auth.signOut();
     setUserEmail(null);
   }
-  async function updatePassword() {
-  setMessage('Updating password...');
-
-  const { error } = await supabase.auth.updateUser({
-    password: newPassword,
-  });
-
-  if (error) {
-    setMessage(error.message);
-    return;
-  }
-
-  setNewPassword('');
-  setMessage('Password updated successfully.');
-}
 
   if (userEmail) {
     return (
