@@ -286,7 +286,63 @@ export default function HomePage() {
           </div>
         </div>
       </section>
+      {/* QUARTERLY RELEASE SCHEDULE */}
+      <section id="release-schedule" className="py-32 px-6 bg-black border-t border-white/10">
+        <div className="max-w-6xl mx-auto">
+          <div className="text-center mb-20">
+            <p className="uppercase tracking-[0.3em] text-sm text-neutral-400 mb-5">
+              Quarterly Release Schedule
+            </p>
 
+            <h2 className="text-5xl md:text-7xl font-extralight mb-8">
+              Four releases. One shared drop.
+            </h2>
+
+            <p className="text-neutral-400 text-xl leading-relaxed max-w-4xl mx-auto font-light">
+              BANGERS operates on a quarterly release model. Enrollment closes 15 days before each release, giving time to finalize edition counts, print, number, package, and ship every collector&apos;s print together.
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-4 gap-6 mb-16">
+            {[
+              ['March 15', 'April 1'],
+              ['June 15', 'July 1'],
+              ['September 15', 'October 1'],
+              ['December 15', 'January 1']
+            ].map(([closes, ships]) => (
+              <div key={closes} className="bg-neutral-950 border border-white/10 rounded-[2rem] p-8 text-center">
+                <p className="text-neutral-500 uppercase tracking-[0.2em] text-sm mb-4">
+                  Enrollment Closes
+                </p>
+
+                <h3 className="text-3xl font-extralight mb-8">
+                  {closes}
+                </h3>
+
+                <div className="border-t border-white/10 pt-8">
+                  <p className="text-neutral-500 uppercase tracking-[0.2em] text-sm mb-4">
+                    Release Ships
+                  </p>
+
+                  <p className="text-3xl font-extralight">
+                    {ships}
+                  </p>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          <div className="bg-neutral-950 border border-white/10 rounded-[2rem] p-10 md:p-12 text-center">
+            <h3 className="text-3xl md:text-4xl font-extralight mb-6">
+              Printed, numbered, and shipped together.
+            </h3>
+
+            <p className="text-neutral-400 text-xl leading-relaxed max-w-4xl mx-auto font-light">
+              Every quarterly release is individually numbered based on the final membership count for each edition. If you enroll after the cutoff date, your first print will be included in the following quarterly release.
+            </p>
+          </div>
+        </div>
+      </section>
       <section id="faq" className="py-32 px-6 bg-neutral-950 border-t border-white/10">
         <div className="max-w-5xl mx-auto">
           <div className="text-center mb-20">
