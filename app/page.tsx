@@ -10,9 +10,7 @@ export default function HomePage() {
   const [billing, setBilling] = useState<BillingCycle>('quarterly');
   const [email, setEmail] = useState('');
   const [loading, setLoading] = useState(false);
-  const [content, setContent] = useState<SiteContent>(fallbackContent);
-  
-  const releaseSchedule = [
+const releaseSchedule = [
   { enrollmentClose: new Date('2026-06-15T23:59:59'), releaseDate: new Date('2026-07-01T00:00:00') },
   { enrollmentClose: new Date('2026-09-15T23:59:59'), releaseDate: new Date('2026-10-01T00:00:00') },
   { enrollmentClose: new Date('2026-12-15T23:59:59'), releaseDate: new Date('2027-01-01T00:00:00') },
@@ -22,29 +20,12 @@ export default function HomePage() {
 const [now, setNow] = useState(new Date());
 
 useEffect(() => {
-  const timer = setInterval(() => setNow(new Date()), 1000);
-  return () => clearInterval(timer);
+  fetch('/api/content', { cache: 'no-store' })
+    .then((res) => res.json())
+    .then((data) => setContent({ ...fallbackContent, ...data }))
+    .catch(() => setContent(fallbackContent));
 }, []);
 
-const currentRelease =
-  releaseSchedule.find((release) => now <= release.releaseDate) || releaseSchedule[0];
-
-const enrollmentOpen = now <= currentRelease.enrollmentClose;
-const inProduction = now > currentRelease.enrollmentClose && now < currentRelease.releaseDate;
-
-const timeTarget = enrollmentOpen ? currentRelease.enrollmentClose : currentRelease.releaseDate;
-const timeLeft = Math.max(timeTarget.getTime() - now.getTime(), 0);
-
-const days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
-const hours = Math.floor((timeLeft / (1000 * 60 * 60)) % 24);
-const minutes = Math.floor((timeLeft / (1000 * 60)) % 60);
-
-  useEffect(() => {
-    fetch('/api/content', { cache: 'no-store' })
-      .then((res) => res.json())
-      .then((data) => setContent({ ...fallbackContent, ...data }))
-      .catch(() => setContent(fallbackContent));
-  }, []);
 useEffect(() => {
   const timer = setInterval(() => {
     setNow(new Date());
@@ -52,7 +33,8 @@ useEffect(() => {
 
   return () => clearInterval(timer);
 }, []);
-  const currentRelease =
+
+const currentRelease =
   releaseSchedule.find((release) => now <= release.releaseDate) || releaseSchedule[0];
 
 const enrollmentOpen = now <= currentRelease.enrollmentClose;
