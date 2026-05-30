@@ -5,6 +5,7 @@ import { supabase } from '@/lib/supabaseClient';
 
 export default function AccountPage() {
   const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [message, setMessage] = useState('');
   const [userEmail, setUserEmail] = useState<string | null>(null);
 
@@ -14,12 +15,30 @@ export default function AccountPage() {
     });
   }, []);
 
-  async function sendMagicLink(e: React.FormEvent<HTMLFormElement>) {
+  async function login(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    setMessage('Sending login link...');
+    setMessage('Signing in...');
 
-    const { error } = await supabase.auth.signInWithOtp({
+    const { error } = await supabase.auth.signInWithPassword({
       email,
+      password,
+    });
+
+    if (error) {
+      setMessage(error.message);
+      return;
+    }
+
+    setUserEmail(email);
+    setMessage('');
+  }
+
+  async function signUp() {
+    setMessage('Creating account...');
+
+    const { error } = await supabase.auth.signUp({
+      email,
+      password,
       options: {
         emailRedirectTo: 'https://bangersprints.com/account',
       },
@@ -30,7 +49,25 @@ export default function AccountPage() {
       return;
     }
 
-    setMessage('Check your email for your login link.');
+    setMessage('Account created. Check your email to confirm it, then log in.');
+  }
+
+  async function openPortal() {
+    const { data } = await supabase.auth.getUser();
+
+    const response = await fetch('/api/customer-portal', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ userId: data.user?.id }),
+    });
+
+    const result = await response.json();
+
+    if (result.url) {
+      window.location.href = result.url;
+    } else {
+      alert(result.error || 'Unable to open subscription portal.');
+    }
   }
 
   async function signOut() {
@@ -47,30 +84,13 @@ export default function AccountPage() {
 
           <div className="bg-neutral-950 border border-white/10 rounded-[2rem] p-8">
             <h2 className="text-3xl font-extralight mb-4">Subscription</h2>
+
             <button
-  onClick={async () => {
-    const { data } = await supabase.auth.getUser();
-
-    const response = await fetch('/api/customer-portal', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        userId: data.user?.id,
-      }),
-    });
-
-    const result = await response.json();
-
-    if (result.url) {
-      window.location.href = result.url;
-    } else {
-      alert(result.error || 'Unable to open subscription portal.');
-    }
-  }}
-  className="bg-white text-black px-6 py-3 rounded-xl"
->
-  Manage Subscription
-</button>
+              onClick={openPortal}
+              className="bg-white text-black px-6 py-3 rounded-xl"
+            >
+              Manage Subscription
+            </button>
           </div>
 
           <button
@@ -90,10 +110,10 @@ export default function AccountPage() {
         <h1 className="text-5xl font-extralight mb-6">Member Login</h1>
 
         <p className="text-neutral-400 text-lg mb-8">
-          Enter your email and we’ll send you a secure magic login link.
+          Log in with your email and password, or create a new account.
         </p>
 
-        <form onSubmit={sendMagicLink} className="space-y-5">
+        <form onSubmit={login} className="space-y-5">
           <input
             type="email"
             required
@@ -103,10 +123,26 @@ export default function AccountPage() {
             className="w-full bg-black border border-white/10 rounded-2xl px-5 py-4 text-white"
           />
 
+          <input
+            type="password"
+            required
+            placeholder="Password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            className="w-full bg-black border border-white/10 rounded-2xl px-5 py-4 text-white"
+          />
+
           <button className="w-full bg-white text-black py-5 rounded-2xl text-lg font-medium">
-            Send Login Link
+            Log In
           </button>
         </form>
+
+        <button
+          onClick={signUp}
+          className="w-full mt-4 border border-white/20 py-5 rounded-2xl text-lg hover:bg-white hover:text-black transition"
+        >
+          Create Account
+        </button>
 
         {message && <p className="text-neutral-300 mt-6">{message}</p>}
       </section>
