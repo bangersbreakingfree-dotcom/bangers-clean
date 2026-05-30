@@ -16,7 +16,7 @@ async function syncSubscription(subscription: Stripe.Subscription) {
 
   if (!userId) return;
 
-  await supabase.from('customer_profiles').upsert({
+  const { error } = await supabase.from('customer_profiles').upsert({
     id: userId,
     email,
     stripe_customer_id:
@@ -29,7 +29,8 @@ async function syncSubscription(subscription: Stripe.Subscription) {
     plan_name: subscription.metadata.membershipName,
     print_size: subscription.metadata.printSize,
     updated_at: new Date().toISOString(),
-  });
+  });if (error) throw error;
+console.log('CUSTOMER PROFILE UPSERTED', userId);
 }
 
 export async function POST(request: Request) {
