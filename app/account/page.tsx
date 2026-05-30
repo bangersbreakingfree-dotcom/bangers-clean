@@ -8,12 +8,27 @@ export default function AccountPage() {
   const [password, setPassword] = useState('');
   const [message, setMessage] = useState('');
   const [userEmail, setUserEmail] = useState<string | null>(null);
+  const [subscriptionStatus, setSubscriptionStatus] = useState<string | null>(null);
 
   useEffect(() => {
-    supabase.auth.getUser().then(({ data }) => {
-      setUserEmail(data.user?.email ?? null);
-    });
-  }, []);
+  async function loadUser() {
+    const { data } = await supabase.auth.getUser();
+
+    setUserEmail(data.user?.email ?? null);
+
+    if (data.user?.email) {
+      const { data: profile } = await supabase
+        .from('customer_profiles')
+        .select('subscription_status')
+        .eq('email', data.user.email)
+        .single();
+
+      setSubscriptionStatus(profile?.subscription_status ?? null);
+    }
+  }
+
+  loadUser();
+}, []);
 
   async function login(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -93,7 +108,11 @@ export default function AccountPage() {
     <p className="text-neutral-500 uppercase tracking-[0.2em] text-xs mb-3">
       Membership Status
     </p>
-    <p className="text-2xl font-extralight">Active</p>
+    <p className="text-2xl font-extralight">
+  {subscriptionStatus === 'trialing'
+    ? 'Reserved'
+    : subscriptionStatus || 'No Membership'}
+</p>
   </div>
 
   <div className="bg-neutral-950 border border-white/10 rounded-2xl p-5">
