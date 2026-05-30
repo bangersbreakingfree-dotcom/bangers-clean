@@ -53,7 +53,14 @@ export default function ReleaseCountdown() {
         </p>
       ) : (
         <>
-          <p className="text-neutral-400 text-lg mb-4">Enrollment closes in</p>
+          <p className="text-neutral-400 text-lg mb-4">
+  Enrollment closes on{' '}
+  {current.close.toLocaleDateString('en-US', {
+    month: 'long',
+    day: 'numeric'
+  })}{' '}
+  in
+</p>
 
           <div className="grid grid-cols-3 gap-3 max-w-md mx-auto">
             <div className="bg-white/5 border border-white/10 rounded-xl p-3">
