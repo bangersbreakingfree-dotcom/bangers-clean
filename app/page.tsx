@@ -11,7 +11,8 @@ export default function HomePage() {
   const [email, setEmail] = useState('');
   const [loading, setLoading] = useState(false);
   const [content, setContent] = useState<SiteContent>(fallbackContent);
-
+const nextRelease = 'April 1, 2026';
+const enrollmentCloses = 'March 15, 2026';
   useEffect(() => {
     fetch('/api/content', { cache: 'no-store' })
       .then((res) => res.json())
@@ -103,7 +104,19 @@ export default function HomePage() {
           <p className="max-w-3xl mx-auto text-xl md:text-3xl text-neutral-200 leading-relaxed mb-12 font-light whitespace-pre-line">
             {content.hero_subtitle}
           </p>
+<div className="max-w-3xl mx-auto mb-10 bg-black/40 backdrop-blur-md border border-white/10 rounded-[2rem] p-6">
+  <p className="uppercase tracking-[0.3em] text-xs text-neutral-400 mb-3">
+    Next BANGERS Release
+  </p>
 
+  <p className="text-3xl md:text-5xl font-extralight mb-3">
+    {nextRelease}
+  </p>
+
+  <p className="text-neutral-400 text-lg">
+    Enrollment closes {enrollmentCloses}
+  </p>
+</div>
           <div className="flex flex-col sm:flex-row gap-5 justify-center">
             <a href="#membership" className="bg-white text-black px-10 py-5 rounded-2xl text-lg font-medium hover:scale-105 transition duration-300 shadow-2xl">
               Become a Collector
