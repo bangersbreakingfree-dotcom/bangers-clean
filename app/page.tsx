@@ -58,7 +58,6 @@ export default function HomePage() {
     setLoading(false);
   }
 }
-  }
 
   return (
     <main className="bg-black text-white min-h-screen overflow-hidden">
