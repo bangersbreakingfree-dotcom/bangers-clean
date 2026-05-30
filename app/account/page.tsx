@@ -43,10 +43,7 @@ export default function AccountPage() {
     e.preventDefault();
     setMessage('Signing in...');
 
-    const { error } = await supabase.auth.signInWithPassword({
-      email,
-      password,
-    });
+    const { error } = await supabase.auth.signInWithPassword({ email, password });
 
     if (error) {
       setMessage(error.message);
@@ -94,6 +91,22 @@ export default function AccountPage() {
     }
   }
 
+  async function updatePassword() {
+    setMessage('Updating password...');
+
+    const { error } = await supabase.auth.updateUser({
+      password: newPassword,
+    });
+
+    if (error) {
+      setMessage(error.message);
+      return;
+    }
+
+    setNewPassword('');
+    setMessage('Password updated successfully.');
+  }
+
   async function signOut() {
     await supabase.auth.signOut();
     setUserEmail(null);
@@ -112,90 +125,77 @@ export default function AccountPage() {
 
           <h1 className="text-5xl font-extralight mb-6">Your Account</h1>
           <p className="text-neutral-300 mb-8">Signed in as {userEmail}</p>
-          
-
-  <input
-    type="password"
-    placeholder="New password"
-    value={newPassword}
-    onChange={(e) => setNewPassword(e.target.value)}
-    className="w-full bg-black border border-white/10 rounded-2xl px-5 py-4 text-white mb-4"
-  />
-
-  <button
-    onClick={updatePassword}
-    className="bg-white text-black px-6 py-3 rounded-xl"
-  >
-    Save New Password
-  </button>
-</div>
 
           <div className="grid md:grid-cols-5 gap-4 mb-8">
             <div className="bg-neutral-950 border border-white/10 rounded-2xl p-5">
-              <p className="text-neutral-500 uppercase tracking-[0.2em] text-xs mb-3">
-                Membership Status
-              </p>
+              <p className="text-neutral-500 uppercase tracking-[0.2em] text-xs mb-3">Membership Status</p>
               <p className="text-2xl font-extralight">
-                {subscriptionStatus === 'trialing'
-                  ? 'Reserved'
-                  : subscriptionStatus || 'No Membership'}
+                {subscriptionStatus === 'trialing' ? 'Reserved' : subscriptionStatus || 'No Membership'}
               </p>
             </div>
 
             <div className="bg-neutral-950 border border-white/10 rounded-2xl p-5">
-              <p className="text-neutral-500 uppercase tracking-[0.2em] text-xs mb-3">
-                Membership
-              </p>
+              <p className="text-neutral-500 uppercase tracking-[0.2em] text-xs mb-3">Membership</p>
               <p className="text-2xl font-extralight">{planName || '—'}</p>
             </div>
 
             <div className="bg-neutral-950 border border-white/10 rounded-2xl p-5">
-              <p className="text-neutral-500 uppercase tracking-[0.2em] text-xs mb-3">
-                Print Size
-              </p>
+              <p className="text-neutral-500 uppercase tracking-[0.2em] text-xs mb-3">Print Size</p>
               <p className="text-2xl font-extralight">{printSize || '—'}</p>
             </div>
 
             <div className="bg-neutral-950 border border-white/10 rounded-2xl p-5">
-              <p className="text-neutral-500 uppercase tracking-[0.2em] text-xs mb-3">
-                Next Charge Date
-              </p>
+              <p className="text-neutral-500 uppercase tracking-[0.2em] text-xs mb-3">Next Charge Date</p>
               <p className="text-2xl font-extralight">
                 {nextChargeDate
                   ? new Date(nextChargeDate).toLocaleDateString('en-US', {
                       month: 'long',
                       day: 'numeric',
                       year: 'numeric',
+                      timeZone: 'UTC',
                     })
                   : '—'}
               </p>
             </div>
 
             <div className="bg-neutral-950 border border-white/10 rounded-2xl p-5">
-              <p className="text-neutral-500 uppercase tracking-[0.2em] text-xs mb-3">
-                Next Shipment Date
-              </p>
+              <p className="text-neutral-500 uppercase tracking-[0.2em] text-xs mb-3">Next Shipment Date</p>
               <p className="text-2xl font-extralight">July 1, 2026</p>
             </div>
           </div>
 
-          <div className="bg-neutral-950 border border-white/10 rounded-[2rem] p-8">
+          <div className="bg-neutral-950 border border-white/10 rounded-[2rem] p-8 mb-8">
             <h2 className="text-3xl font-extralight mb-4">Subscription</h2>
 
-            <button
-              onClick={openPortal}
-              className="bg-white text-black px-6 py-3 rounded-xl"
-            >
+            <button onClick={openPortal} className="bg-white text-black px-6 py-3 rounded-xl">
               Manage Subscription
+            </button>
+          </div>
+
+          <div className="bg-neutral-950 border border-white/10 rounded-[2rem] p-8 mb-8">
+            <h2 className="text-3xl font-extralight mb-4">Update Password</h2>
+
+            <input
+              type="password"
+              placeholder="New password"
+              value={newPassword}
+              onChange={(e) => setNewPassword(e.target.value)}
+              className="w-full bg-black border border-white/10 rounded-2xl px-5 py-4 text-white mb-4"
+            />
+
+            <button onClick={updatePassword} className="bg-white text-black px-6 py-3 rounded-xl">
+              Save New Password
             </button>
           </div>
 
           <button
             onClick={signOut}
-            className="mt-8 border border-white/20 px-6 py-3 rounded-xl hover:bg-white hover:text-black transition"
+            className="border border-white/20 px-6 py-3 rounded-xl hover:bg-white hover:text-black transition"
           >
             Sign Out
           </button>
+
+          {message && <p className="text-neutral-300 mt-6">{message}</p>}
         </section>
       </main>
     );
@@ -232,29 +232,30 @@ export default function AccountPage() {
           <button className="w-full bg-white text-black py-5 rounded-2xl text-lg font-medium">
             Log In
           </button>
-<button
-  type="button"
-  onClick={async () => {
-    if (!email) {
-      setMessage('Enter your email first, then click forgot password.');
-      return;
-    }
 
-    const { error } = await supabase.auth.resetPasswordForEmail(email, {
-      redirectTo: 'https://bangersprints.com/reset-password',
-    });
+          <button
+            type="button"
+            onClick={async () => {
+              if (!email) {
+                setMessage('Enter your email first, then click forgot password.');
+                return;
+              }
 
-    if (error) {
-      setMessage(error.message);
-      return;
-    }
+              const { error } = await supabase.auth.resetPasswordForEmail(email, {
+                redirectTo: 'https://bangersprints.com/reset-password',
+              });
 
-    setMessage('Password reset email sent. Check your inbox.');
-  }}
-  className="w-full text-neutral-400 text-sm hover:text-white transition"
->
-  Forgot password?
-</button>
+              if (error) {
+                setMessage(error.message);
+                return;
+              }
+
+              setMessage('Password reset email sent. Check your inbox.');
+            }}
+            className="w-full text-neutral-400 text-sm hover:text-white transition"
+          >
+            Forgot password?
+          </button>
         </form>
 
         <button
