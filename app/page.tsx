@@ -215,7 +215,7 @@ export default function HomePage() {
                   <label className="block text-sm uppercase tracking-[0.2em] text-neutral-500 mb-3">Select Edition</label>
                   <select value={tier} onChange={(event) => setTier(event.target.value as Tier)} className="w-full bg-black border border-white/10 rounded-2xl px-5 py-4 text-white">
                     <option value="explorer">Explorer Edition — 8x10</option>
-                    <option value="adventurer">Adventurer Edition — 14x18</option>
+                    <option value="adventurer">Adventurer Edition — 16x20</option>
                     <option value="collector">Collector Edition — 20x24</option>
                   </select>
                 </div>
