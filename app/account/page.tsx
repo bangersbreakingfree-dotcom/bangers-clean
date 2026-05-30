@@ -17,13 +17,16 @@ export default function AccountPage() {
     setUserEmail(data.user?.email ?? null);
 
     if (data.user?.email) {
-      const { data: profile } = await supabase
+      const { data: profile, error } = await supabase
   .from('customer_profiles')
   .select('subscription_status')
   .eq('email', data.user.email)
   .single();
 
-      setSubscriptionStatus(profile?.subscription_status ?? null);
+console.log('PROFILE RESULT', profile);
+console.log('PROFILE ERROR', error);
+
+setSubscriptionStatus(profile?.subscription_status ?? null);
     }
   }
 
