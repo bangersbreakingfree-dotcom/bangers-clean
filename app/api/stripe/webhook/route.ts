@@ -63,16 +63,21 @@ export async function POST(request: Request) {
     }
 
     if (event.type === 'checkout.session.completed') {
-      const session = event.data.object as Stripe.Checkout.Session;
+  const session = event.data.object as Stripe.Checkout.Session;
 
-      if (session.subscription) {
-        const subscription = await stripe.subscriptions.retrieve(
-          session.subscription as string
-        );
+  if (session.subscription) {
+    const subscription = await stripe.subscriptions.retrieve(
+      session.subscription as string
+    );
 
-        await syncSubscription(subscription);
-      }
-    }
+    subscription.metadata = {
+      ...subscription.metadata,
+      ...session.metadata,
+    };
+
+    await syncSubscription(subscription);
+  }
+}
 
     return NextResponse.json({ received: true });
   } catch (error) {
