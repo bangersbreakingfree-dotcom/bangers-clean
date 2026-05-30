@@ -47,9 +47,30 @@ export default function AccountPage() {
 
           <div className="bg-neutral-950 border border-white/10 rounded-[2rem] p-8">
             <h2 className="text-3xl font-extralight mb-4">Subscription</h2>
-            <p className="text-neutral-400">
-              Subscription details will appear here after we connect Stripe.
-            </p>
+            <button
+  onClick={async () => {
+    const { data } = await supabase.auth.getUser();
+
+    const response = await fetch('/api/customer-portal', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        userId: data.user?.id,
+      }),
+    });
+
+    const result = await response.json();
+
+    if (result.url) {
+      window.location.href = result.url;
+    } else {
+      alert(result.error || 'Unable to open subscription portal.');
+    }
+  }}
+  className="bg-white text-black px-6 py-3 rounded-xl"
+>
+  Manage Subscription
+</button>
           </div>
 
           <button
