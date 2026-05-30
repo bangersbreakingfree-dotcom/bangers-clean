@@ -110,11 +110,11 @@ const enrollmentCloses = 'March 15, 2026';
   </p>
 
   <p className="text-3xl md:text-5xl font-extralight mb-3">
-    {nextRelease}
+    July 1, 2026
   </p>
 
   <p className="text-neutral-400 text-lg">
-    Enrollment closes {enrollmentCloses}
+    Currently in production
   </p>
 </div>
           <div className="flex flex-col sm:flex-row gap-5 justify-center">
