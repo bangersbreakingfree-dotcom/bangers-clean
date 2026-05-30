@@ -59,7 +59,13 @@ export async function POST(request: Request) {
       event.type === 'customer.subscription.updated' ||
       event.type === 'customer.subscription.deleted'
     ) {
-      await syncSubscription(event.data.object as Stripe.Subscription);
+      await syncSubscription({
+  ...subscription,
+  metadata: {
+    ...subscription.metadata,
+    ...session.metadata,
+  },
+} as Stripe.Subscription);
     }
 
     if (event.type === 'checkout.session.completed') {
