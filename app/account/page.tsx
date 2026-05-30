@@ -6,6 +6,7 @@ import { supabase } from '@/lib/supabaseClient';
 export default function AccountPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [newPassword, setNewPassword] = useState('');
   const [message, setMessage] = useState('');
   const [userEmail, setUserEmail] = useState<string | null>(null);
   const [subscriptionStatus, setSubscriptionStatus] = useState<string | null>(null);
@@ -97,6 +98,21 @@ export default function AccountPage() {
     await supabase.auth.signOut();
     setUserEmail(null);
   }
+  async function updatePassword() {
+  setMessage('Updating password...');
+
+  const { error } = await supabase.auth.updateUser({
+    password: newPassword,
+  });
+
+  if (error) {
+    setMessage(error.message);
+    return;
+  }
+
+  setNewPassword('');
+  setMessage('Password updated successfully.');
+}
 
   if (userEmail) {
     return (
@@ -111,6 +127,24 @@ export default function AccountPage() {
 
           <h1 className="text-5xl font-extralight mb-6">Your Account</h1>
           <p className="text-neutral-300 mb-8">Signed in as {userEmail}</p>
+          <div className="bg-neutral-950 border border-white/10 rounded-[2rem] p-8 mb-8">
+  <h2 className="text-3xl font-extralight mb-4">Update Password</h2>
+
+  <input
+    type="password"
+    placeholder="New password"
+    value={newPassword}
+    onChange={(e) => setNewPassword(e.target.value)}
+    className="w-full bg-black border border-white/10 rounded-2xl px-5 py-4 text-white mb-4"
+  />
+
+  <button
+    onClick={updatePassword}
+    className="bg-white text-black px-6 py-3 rounded-xl"
+  >
+    Save New Password
+  </button>
+</div>
 
           <div className="grid md:grid-cols-5 gap-4 mb-8">
             <div className="bg-neutral-950 border border-white/10 rounded-2xl p-5">
