@@ -214,6 +214,29 @@ export default function AccountPage() {
           <button className="w-full bg-white text-black py-5 rounded-2xl text-lg font-medium">
             Log In
           </button>
+<button
+  type="button"
+  onClick={async () => {
+    if (!email) {
+      setMessage('Enter your email first, then click forgot password.');
+      return;
+    }
+
+    const { error } = await supabase.auth.resetPasswordForEmail(email, {
+      redirectTo: 'https://bangersprints.com/account',
+    });
+
+    if (error) {
+      setMessage(error.message);
+      return;
+    }
+
+    setMessage('Password reset email sent. Check your inbox.');
+  }}
+  className="w-full text-neutral-400 text-sm hover:text-white transition"
+>
+  Forgot password?
+</button>
         </form>
 
         <button
