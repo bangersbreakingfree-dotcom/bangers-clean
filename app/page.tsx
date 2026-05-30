@@ -114,8 +114,8 @@ const enrollmentCloses = 'March 15, 2026';
   </p>
 
   <p className="text-neutral-400 text-lg">
-    Currently in production
-  </p>
+  Enrollment closes June 15, 2026
+</p>
 </div>
           <div className="flex flex-col sm:flex-row gap-5 justify-center">
             <a href="#membership" className="bg-white text-black px-10 py-5 rounded-2xl text-lg font-medium hover:scale-105 transition duration-300 shadow-2xl">
