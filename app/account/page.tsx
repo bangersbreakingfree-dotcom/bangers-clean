@@ -257,7 +257,7 @@ export default function AccountPage() {
     }
 
     const { error } = await supabase.auth.resetPasswordForEmail(email, {
-      redirectTo: 'https://bangersprints.com/account',
+      redirectTo: 'https://bangersprints.com/reset-password',
     });
 
     if (error) {
