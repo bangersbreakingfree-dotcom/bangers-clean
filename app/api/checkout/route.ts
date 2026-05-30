@@ -1,7 +1,21 @@
 import { NextResponse } from 'next/server';
 import Stripe from 'stripe';
 import { plans } from '@/lib/plans';
+function getNextReleaseTrialEnd() {
+  const now = new Date();
+  const year = now.getFullYear();
 
+  const releases = [
+    { cutoff: new Date(year, 2, 15, 23, 59, 59), release: new Date(year, 3, 1, 0, 0, 0) },
+    { cutoff: new Date(year, 5, 15, 23, 59, 59), release: new Date(year, 6, 1, 0, 0, 0) },
+    { cutoff: new Date(year, 8, 15, 23, 59, 59), release: new Date(year, 9, 1, 0, 0, 0) },
+    { cutoff: new Date(year, 11, 15, 23, 59, 59), release: new Date(year + 1, 0, 1, 0, 0, 0) },
+  ];
+
+  const nextRelease = releases.find((item) => now <= item.cutoff)?.release || new Date(year + 1, 3, 1, 0, 0, 0);
+
+  return Math.floor(nextRelease.getTime() / 1000);
+}
 export async function POST(request: Request) {
   try {
     if (!process.env.STRIPE_SECRET_KEY || process.env.STRIPE_SECRET_KEY.includes('replace_me')) {
@@ -22,7 +36,7 @@ export async function POST(request: Request) {
     }
 
     const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
-
+const trialEnd = getNextReleaseTrialEnd();
     const session = await stripe.checkout.sessions.create({
       mode: 'subscription',
       line_items: [
@@ -58,8 +72,14 @@ export async function POST(request: Request) {
         printSize: plan.size,
         billingCycle: plan.billing,
       },
-      subscription_data: {
-        metadata: {
+     subscription_data: {
+  trial_end: trialEnd,
+  trial_settings: {
+    end_behavior: {
+      missing_payment_method: 'cancel',
+    },
+  },
+  metadata: {
           brand: 'BANGERS',
           userId: body.userId || '',
           email: body.email || '',
