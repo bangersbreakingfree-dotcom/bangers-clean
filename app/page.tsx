@@ -51,7 +51,7 @@ useEffect(() => {
   }, 1000);
 
   return () => clearInterval(timer);
-}, []);step 2 
+}, []);
   const currentRelease =
   releaseSchedule.find((release) => now <= release.releaseDate) || releaseSchedule[0];
 
