@@ -92,40 +92,4 @@ export default function ReleaseCountdown() {
       )}
     </div>
   );
-}      ) : (
-        <>
-          <p className="text-neutral-400 text-lg mb-4">
-            Enrollment closes on{' '}
-            {current.close.toLocaleDateString('en-US', {
-              month: 'long',
-              day: 'numeric'
-            })}{' '}
-            in
-          </p>
-
-          <div className="grid grid-cols-3 gap-3 max-w-md mx-auto">
-            <div className="bg-white/5 border border-white/10 rounded-xl p-3">
-              <p className="text-2xl font-light">{days}</p>
-              <p className="text-xs uppercase tracking-widest text-neutral-500">Days</p>
-            </div>
-
-            <div className="bg-white/5 border border-white/10 rounded-xl p-3">
-              <p className="text-2xl font-light">{hours}</p>
-              <p className="text-xs uppercase tracking-widest text-neutral-500">Hours</p>
-            </div>
-
-            <div className="bg-white/5 border border-white/10 rounded-xl p-3">
-              <p className="text-2xl font-light">{minutes}</p>
-              <p className="text-xs uppercase tracking-widest text-neutral-500">Minutes</p>
-            </div>
-          </div>
-        </>
-      )}
-    </div>
-  );
-}          </div>
-        </>
-      )}
-    </div>
-  );
-}
+}     
