@@ -25,32 +25,39 @@ export default function HomePage() {
   );
 
   async function subscribe() {
-    setLoading(true);
+  setLoading(true);
 
-    try {
-      const { data: userData } = await supabase.auth.getUser();
-const response = await fetch('/api/checkout', {
-  method: 'POST',
-  headers: { 'Content-Type': 'application/json' },
-  body: JSON.stringify({
-    tier,
-    billing,
-    email: userData.user?.email || email,
-    userId: userData.user?.id || ''
-  })
-});
+  try {
+    const authResult = await supabase.auth.getUser();
+    const user = authResult.data.user;
 
-      const data = await response.json();
+    const response = await fetch('/api/checkout', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        tier,
+        billing,
+        email: user?.email || email,
+        userId: user?.id || '',
+      }),
+    });
 
-      if (!response.ok) {
-        throw new Error(data.error || 'Checkout is not connected yet.');
-      }
+    const data = await response.json();
 
-      window.location.href = data.url;
-    } catch (error) {
-      alert(error instanceof Error ? error.message : 'Checkout is not connected yet.');
-      setLoading(false);
+    if (!response.ok) {
+      throw new Error(data.error || 'Checkout is not connected yet.');
     }
+
+    window.location.href = data.url;
+  } catch (error) {
+    alert(
+      error instanceof Error
+        ? error.message
+        : 'Checkout is not connected yet.'
+    );
+    setLoading(false);
+  }
+}
   }
 
   return (
