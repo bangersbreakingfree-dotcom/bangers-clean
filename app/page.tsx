@@ -5,86 +5,89 @@ import { useEffect, useMemo, useState } from 'react';
 import { BillingCycle, planGroups, plans, Tier } from '@/lib/plans';
 import { fallbackContent, SiteContent } from '@/lib/content';
 import { supabase } from '@/lib/supabaseClient';
+
 export default function HomePage() {
   const [tier, setTier] = useState<Tier>('adventurer');
   const [billing, setBilling] = useState<BillingCycle>('quarterly');
   const [email, setEmail] = useState('');
   const [loading, setLoading] = useState(false);
-const releaseSchedule = [
-  { enrollmentClose: new Date('2026-06-15T23:59:59'), releaseDate: new Date('2026-07-01T00:00:00') },
-  { enrollmentClose: new Date('2026-09-15T23:59:59'), releaseDate: new Date('2026-10-01T00:00:00') },
-  { enrollmentClose: new Date('2026-12-15T23:59:59'), releaseDate: new Date('2027-01-01T00:00:00') },
-  { enrollmentClose: new Date('2027-03-15T23:59:59'), releaseDate: new Date('2027-04-01T00:00:00') }
-];
+  const [content, setContent] = useState<SiteContent>(fallbackContent);
+  const [now, setNow] = useState(new Date());
 
-const [now, setNow] = useState(new Date());
+  const releaseSchedule = [
+    { enrollmentClose: new Date('2026-06-15T23:59:59'), releaseDate: new Date('2026-07-01T00:00:00') },
+    { enrollmentClose: new Date('2026-09-15T23:59:59'), releaseDate: new Date('2026-10-01T00:00:00') },
+    { enrollmentClose: new Date('2026-12-15T23:59:59'), releaseDate: new Date('2027-01-01T00:00:00') },
+    { enrollmentClose: new Date('2027-03-15T23:59:59'), releaseDate: new Date('2027-04-01T00:00:00') }
+  ];
 
-useEffect(() => {
-  fetch('/api/content', { cache: 'no-store' })
-    .then((res) => res.json())
-    .then((data) => setContent({ ...fallbackContent, ...data }))
-    .catch(() => setContent(fallbackContent));
-}, []);
+  useEffect(() => {
+    fetch('/api/content', { cache: 'no-store' })
+      .then((res) => res.json())
+      .then((data) => setContent({ ...fallbackContent, ...data }))
+      .catch(() => setContent(fallbackContent));
+  }, []);
 
-useEffect(() => {
-  const timer = setInterval(() => {
-    setNow(new Date());
-  }, 1000);
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setNow(new Date());
+    }, 1000);
 
-  return () => clearInterval(timer);
-}, []);
+    return () => clearInterval(timer);
+  }, []);
 
-const currentRelease =
-  releaseSchedule.find((release) => now <= release.releaseDate) || releaseSchedule[0];
+  const currentRelease =
+    releaseSchedule.find((release) => now <= release.releaseDate) || releaseSchedule[0];
 
-const enrollmentOpen = now <= currentRelease.enrollmentClose;
-const inProduction = now > currentRelease.enrollmentClose && now < currentRelease.releaseDate;
+  const enrollmentOpen = now <= currentRelease.enrollmentClose;
+  const inProduction = now > currentRelease.enrollmentClose && now < currentRelease.releaseDate;
 
-const timeTarget = enrollmentOpen ? currentRelease.enrollmentClose : currentRelease.releaseDate;
-const timeLeft = Math.max(timeTarget.getTime() - now.getTime(), 0);
+  const timeTarget = enrollmentOpen ? currentRelease.enrollmentClose : currentRelease.releaseDate;
+  const timeLeft = Math.max(timeTarget.getTime() - now.getTime(), 0);
 
-const days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
-const hours = Math.floor((timeLeft / (1000 * 60 * 60)) % 24);
-const minutes = Math.floor((timeLeft / (1000 * 60)) % 60);
+  const days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
+  const hours = Math.floor((timeLeft / (1000 * 60 * 60)) % 24);
+  const minutes = Math.floor((timeLeft / (1000 * 60)) % 60);
+
   const selectedPlan = useMemo(
     () => plans.find((plan) => plan.tier === tier && plan.billing === billing)!,
     [tier, billing]
   );
 
   async function subscribe() {
-  setLoading(true);
+    setLoading(true);
 
-  try {
-    const authResult = await supabase.auth.getUser();
-    const user = authResult.data.user;
+    try {
+      const authResult = await supabase.auth.getUser();
+      const user = authResult.data.user;
 
-    const response = await fetch('/api/checkout', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        tier,
-        billing,
-        email: user?.email || email,
-        userId: user?.id || '',
-      }),
-    });
+      const response = await fetch('/api/checkout', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          tier,
+          billing,
+          email: user?.email || email,
+          userId: user?.id || '',
+        }),
+      });
 
-    const data = await response.json();
+      const data = await response.json();
 
-    if (!response.ok) {
-      throw new Error(data.error || 'Checkout is not connected yet.');
+      if (!response.ok) {
+        throw new Error(data.error || 'Checkout is not connected yet.');
+      }
+
+      window.location.href = data.url;
+    } catch (error) {
+      alert(
+        error instanceof Error
+          ? error.message
+          : 'Checkout is not connected yet.'
+      );
+      setLoading(false);
     }
-
-    window.location.href = data.url;
-  } catch (error) {
-    alert(
-      error instanceof Error
-        ? error.message
-        : 'Checkout is not connected yet.'
-    );
-    setLoading(false);
   }
-}
 
   return (
     <main className="bg-black text-white min-h-screen overflow-hidden">
