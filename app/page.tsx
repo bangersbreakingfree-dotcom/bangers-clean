@@ -9,6 +9,7 @@ import { supabase } from '@/lib/supabaseClient';
 export default function HomePage() {
   const [tier, setTier] = useState<Tier>('adventurer');
   const [billing, setBilling] = useState<BillingCycle>('quarterly');
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [email, setEmail] = useState('');
   const [loading, setLoading] = useState(false);
   const [content, setContent] = useState<SiteContent>(fallbackContent);
@@ -64,7 +65,7 @@ const enrollmentCloses = 'March 15, 2026';
   return (
     <main className="bg-black text-white min-h-screen overflow-hidden">
       <header className="fixed top-0 left-0 right-0 z-50 backdrop-blur-md bg-black/40 border-b border-white/10">
-        <div className="max-w-7xl mx-auto px-6 py-5 flex items-center justify-between">
+        <div className="relative max-w-7xl mx-auto px-6 py-5 flex items-center justify-between">
           <a href="#" className="text-2xl tracking-[0.35em] font-light">BANGERS</a>
 
           <nav className="hidden md:flex items-center gap-10 text-sm uppercase tracking-[0.2em] text-neutral-300">
@@ -74,6 +75,22 @@ const enrollmentCloses = 'March 15, 2026';
             <a href="#faq" className="hover:text-white transition">FAQ</a>
             <a href="/account" className="hover:text-white transition">Account</a>
           </nav>
+          <button
+  type="button"
+  onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+  className="md:hidden border border-white/20 px-4 py-2 rounded-xl hover:bg-white hover:text-black transition"
+>
+  Menu
+</button>
+          {mobileMenuOpen && (
+  <div className="absolute top-full left-0 right-0 bg-black border-t border-white/10 md:hidden">
+    <div className="flex flex-col p-6 gap-4 text-sm uppercase tracking-[0.2em] text-neutral-300">
+      <a href="#experience">Experience</a>
+      <a href="#membership">Membership</a>
+      <a href="/account">Account</a>
+    </div>
+  </div>
+)}
 
           <a href="#membership" className="border border-white/20 px-5 py-2 rounded-xl hover:bg-white hover:text-black transition">Join</a>
         </div>
