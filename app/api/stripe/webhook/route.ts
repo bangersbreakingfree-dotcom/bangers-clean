@@ -5,6 +5,103 @@ import { getSupabaseAdmin } from '@/lib/supabaseAdmin';
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   apiVersion: '2024-06-20',
 });
+async function sendCancellationEmail(subscription: Stripe.Subscription) {
+  if (!process.env.RESEND_API_KEY) {
+    console.log('RESEND_API_KEY not set. Skipping cancellation email.');
+    return;
+  }
+
+  let customerEmail = subscription.metadata.email;
+  let customerName = 'BANGERS Member';
+
+  if (!customerEmail && subscription.customer) {
+    const customer = await stripe.customers.retrieve(
+      typeof subscription.customer === 'string'
+        ? subscription.customer
+        : subscription.customer.id
+    );
+
+    if (!customer.deleted) {
+      customerEmail = customer.email || '';
+      customerName = customer.name || customerEmail || 'BANGERS Member';
+    }
+  }
+
+  if (!customerEmail) {
+    console.log('No customer email found. Skipping cancellation email.');
+    return;
+  }
+
+  const endDate = new Date(
+    (subscription.cancel_at || subscription.current_period_end) * 1000
+  ).toLocaleDateString('en-US', {
+    month: 'long',
+    day: 'numeric',
+    year: 'numeric',
+    timeZone: 'UTC',
+  });
+
+  await fetch('https://api.resend.com/emails', {
+    method: 'POST',
+    headers: {
+      Authorization: `Bearer ${process.env.RESEND_API_KEY}`,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      from: 'BANGERS Membership <membership@bangersprints.com>',
+      to: customerEmail,
+      subject: 'Your BANGERS Membership Has Been Canceled',
+      html: `
+        <div style="font-family: Arial, sans-serif; max-width: 620px; margin: 0 auto; padding: 32px; color: #111111;">
+          <div style="text-align: center; margin-bottom: 28px;">
+            <img 
+              src="https://bangersprints.com/logo.png" 
+              alt="BANGERS" 
+              style="max-width: 260px; height: auto;"
+            />
+          </div>
+
+          <h2 style="font-size: 28px; margin-bottom: 16px;">
+            Your BANGERS membership has been canceled
+          </h2>
+
+          <p style="font-size: 16px; line-height: 1.6;">
+            Hi ${customerName},
+          </p>
+
+          <p style="font-size: 16px; line-height: 1.6;">
+            This confirms that your BANGERS membership has been canceled.
+          </p>
+
+          <p style="font-size: 16px; line-height: 1.6;">
+            Your membership will remain reserved through ${endDate}. You will continue to receive any release already included in your current membership period.
+          </p>
+
+          <p style="font-size: 16px; line-height: 1.6;">
+            After that date, your membership will not renew and no future charges will be made.
+          </p>
+
+          <p style="font-size: 14px; line-height: 1.6; color: #555555;">
+            You are always welcome back whenever you're ready for the next BANGERS release.
+          </p>
+
+          <p style="font-size: 14px; line-height: 1.6; color: #555555;">
+            — The BANGERS Team
+          </p>
+
+          <hr style="border: none; border-top: 1px solid #eeeeee; margin: 32px 0;" />
+
+          <p style="font-size: 13px; color: #777777;">
+            Visit BANGERS:
+            <a href="https://bangersprints.com" style="color: #111111;">
+              bangersprints.com
+            </a>
+          </p>
+        </div>
+      `,
+    }),
+  });
+}
 
 async function syncSubscription(
   subscription: Stripe.Subscription,
@@ -78,12 +175,22 @@ export async function POST(request: Request) {
 
   try {
     if (
-      event.type === 'customer.subscription.created' ||
-      event.type === 'customer.subscription.updated' ||
-      event.type === 'customer.subscription.deleted'
-    ) {
-      await syncSubscription(event.data.object as Stripe.Subscription);
-    }
+  event.type === 'customer.subscription.created' ||
+  event.type === 'customer.subscription.updated' ||
+  event.type === 'customer.subscription.deleted'
+) {
+  const subscription = event.data.object as Stripe.Subscription;
+
+  await syncSubscription(subscription);
+
+  if (
+    event.type === 'customer.subscription.deleted' ||
+    (event.type === 'customer.subscription.updated' &&
+      subscription.cancel_at_period_end)
+  ) {
+    await sendCancellationEmail(subscription);
+  }
+}
 
     if (event.type === 'checkout.session.completed') {
       const session = event.data.object as Stripe.Checkout.Session;
