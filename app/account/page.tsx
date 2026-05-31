@@ -133,7 +133,7 @@ export default function AccountPage() {
                 {subscriptionStatus === 'trialing'
   ? 'Reserved'
   : subscriptionStatus === 'active'
-  ? 'Active'
+  ? 'Reserved'
   : subscriptionStatus === 'incomplete_expired'
   ? 'Action Required'
   : subscriptionStatus || 'No Membership'}
