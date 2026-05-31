@@ -4,6 +4,13 @@ import { useEffect, useMemo, useState } from 'react';
 
 type Subscriber = {
   email: string;
+  customer_name: string;
+  address_line1: string;
+  address_line2: string;
+  city: string;
+  state: string;
+  postal_code: string;
+  country: string;
   subscription_status: string | null;
   plan_name: string | null;
   print_size: string | null;
@@ -40,15 +47,35 @@ export default function SubscribersPage() {
 
   function exportCsv() {
     const rows = [
-      ['Email', 'Status', 'Membership', 'Print Size', 'Next Charge Date'],
-      ...subscribers.map((s) => [
-        s.email,
-        s.subscription_status || '',
-        s.plan_name || '',
-        s.print_size || '',
-        s.current_period_end || '',
-      ]),
-    ];
+  [
+    'Name',
+    'Email',
+    'Status',
+    'Membership',
+    'Print Size',
+    'Next Charge Date',
+    'Address Line 1',
+    'Address Line 2',
+    'City',
+    'State',
+    'Postal Code',
+    'Country',
+  ],
+  ...subscribers.map((s) => [
+    s.customer_name || '',
+    s.email,
+    s.subscription_status || '',
+    s.plan_name || '',
+    s.print_size || '',
+    s.current_period_end || '',
+    s.address_line1 || '',
+    s.address_line2 || '',
+    s.city || '',
+    s.state || '',
+    s.postal_code || '',
+    s.country || '',
+  ]),
+];
 
     const csv = rows.map((row) => row.map((cell) => `"${cell}"`).join(',')).join('\n');
     const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
