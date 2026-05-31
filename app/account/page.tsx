@@ -130,7 +130,13 @@ export default function AccountPage() {
             <div className="bg-neutral-950 border border-white/10 rounded-2xl p-5">
               <p className="text-neutral-500 uppercase tracking-[0.2em] text-xs mb-3">Membership Status</p>
               <p className="text-2xl font-extralight">
-                {subscriptionStatus === 'trialing' ? 'Reserved' : subscriptionStatus || 'No Membership'}
+                {subscriptionStatus === 'trialing'
+  ? 'Reserved'
+  : subscriptionStatus === 'active'
+  ? 'Active'
+  : subscriptionStatus === 'incomplete_expired'
+  ? 'Action Required'
+  : subscriptionStatus || 'No Membership'}
               </p>
             </div>
 
