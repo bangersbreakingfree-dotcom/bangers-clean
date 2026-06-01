@@ -1,6 +1,6 @@
 'use client';
 
-import Image from 'next/image';
+
 import { useEffect, useState } from 'react';
 
 type GalleryImage = {
@@ -69,13 +69,11 @@ export default function GalleryPage() {
                   index % 5 === 0 ? 'md:row-span-2' : ''
                 }`}
               >
-                <Image
-                  src={image.image_url}
-                  alt={image.title || `BANGERS gallery example ${index + 1}`}
-                  width={900}
-                  height={1200}
-                  className="w-full h-full object-cover hover:scale-105 transition duration-700"
-                />
+             <img
+  src={image.image_url}
+  alt={image.title || `BANGERS gallery example ${index + 1}`}
+  className="w-full h-full object-cover hover:scale-105 transition duration-700"
+/>
               </div>
             ))}
           </div>
