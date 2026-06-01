@@ -73,6 +73,7 @@ const enrollmentCloses = 'March 15, 2026';
             <a href="#membership" className="hover:text-white transition">Membership</a>
             <a href="#experience" className="hover:text-white transition">Experience</a>
             <a href="#faq" className="hover:text-white transition">FAQ</a>
+            <a href="/gallery">Gallery</a>
             <a href="/account" className="hover:text-white transition">Account</a>
           </nav>
           <button
@@ -87,6 +88,8 @@ const enrollmentCloses = 'March 15, 2026';
     <div className="flex flex-col p-6 gap-4 text-sm uppercase tracking-[0.2em] text-neutral-300">
       <a href="#experience">Experience</a>
       <a href="#membership">Membership</a>
+      <a href="/gallery">Gallery</a>
+      <a href="#faq">FAQ</a>
       <a href="/account">Account</a>
     </div>
   </div>
