@@ -79,3 +79,27 @@ const { error: uploadError } = await supabase.storage
 
   return NextResponse.json({ success: true });
 }
+export async function DELETE(request: Request) {
+  const supabase = getSupabaseAdmin();
+
+  if (!supabase) {
+    return NextResponse.json({ error: 'Supabase not connected' }, { status: 500 });
+  }
+
+  const { id } = await request.json();
+
+  if (!id) {
+    return NextResponse.json({ error: 'Missing image ID' }, { status: 400 });
+  }
+
+  const { error } = await supabase
+    .from('gallery_images')
+    .delete()
+    .eq('id', id);
+
+  if (error) {
+    return NextResponse.json({ error: error.message }, { status: 500 });
+  }
+
+  return NextResponse.json({ success: true });
+}
