@@ -29,6 +29,15 @@ export default function AdminGalleryPage() {
   async function addImage(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setMessage('Adding image...');
+    if (!file) {
+  setMessage('Please choose an image file first.');
+  return;
+}
+
+const formData = new FormData();
+formData.append('file', file);
+formData.append('title', title);
+formData.append('sort_order', sortOrder || '0');
 
     const response = await fetch('/api/admin/gallery', {
   method: 'POST',
@@ -42,7 +51,6 @@ export default function AdminGalleryPage() {
       return;
     }
 
-    setId('');
     setFile(null);
     setTitle('');
     setSortOrder('');
