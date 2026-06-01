@@ -11,8 +11,7 @@ type GalleryImage = {
 
 export default function AdminGalleryPage() {
   const [images, setImages] = useState<GalleryImage[]>([]);
-  const [id, setId] = useState('');
-  const [imageUrl, setImageUrl] = useState('');
+  const [file, setFile] = useState<File | null>(null);
   const [title, setTitle] = useState('');
   const [sortOrder, setSortOrder] = useState('');
   const [message, setMessage] = useState('');
@@ -32,15 +31,9 @@ export default function AdminGalleryPage() {
     setMessage('Adding image...');
 
     const response = await fetch('/api/admin/gallery', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        id: Number(id),
-        image_url: imageUrl,
-        title,
-        sort_order: Number(sortOrder || 0),
-      }),
-    });
+  method: 'POST',
+  body: formData,
+});
 
     const result = await response.json();
 
@@ -50,7 +43,7 @@ export default function AdminGalleryPage() {
     }
 
     setId('');
-    setImageUrl('');
+    setFile(null);
     setTitle('');
     setSortOrder('');
     setMessage('Image added.');
@@ -74,22 +67,14 @@ export default function AdminGalleryPage() {
         </p>
 
         <form onSubmit={addImage} className="bg-neutral-950 border border-white/10 rounded-[2rem] p-8 mb-10 space-y-5">
-          <input
-            required
-            type="number"
-            placeholder="ID number, example: 2"
-            value={id}
-            onChange={(e) => setId(e.target.value)}
-            className="w-full bg-black border border-white/10 rounded-2xl px-5 py-4 text-white"
-          />
 
           <input
-            required
-            placeholder="Image URL, example: /gallery/photo-2.jpg"
-            value={imageUrl}
-            onChange={(e) => setImageUrl(e.target.value)}
-            className="w-full bg-black border border-white/10 rounded-2xl px-5 py-4 text-white"
-          />
+  required
+  type="file"
+  accept="image/*"
+  onChange={(e) => setFile(e.target.files?.[0] || null)}
+  className="w-full bg-black border border-white/10 rounded-2xl px-5 py-4 text-white"
+/>
 
           <input
             placeholder="Title, example: Yosemite Valley"
