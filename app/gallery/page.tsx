@@ -13,6 +13,10 @@ type GalleryImage = {
 export default function GalleryPage() {
   const [images, setImages] = useState<GalleryImage[]>([]);
   const [loading, setLoading] = useState(true);
+export default function GalleryPage() {
+  const [images, setImages] = useState<GalleryImage[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [selectedImage, setSelectedImage] = useState<GalleryImage | null>(null);
 
   useEffect(() => {
     async function loadImages() {
@@ -70,15 +74,35 @@ export default function GalleryPage() {
                 }`}
               >
              <img
+  <img
   src={image.image_url}
   alt={image.title || `BANGERS gallery example ${index + 1}`}
-  className="w-full h-full object-cover hover:scale-105 transition duration-700"
+  onClick={() => setSelectedImage(image)}
+  className="w-full h-full object-cover hover:scale-105 transition duration-700 cursor-pointer"
 />
               </div>
             ))}
           </div>
         )}
+{selectedImage && (
+  <div
+    onClick={() => setSelectedImage(null)}
+    className="fixed inset-0 z-50 bg-black/95 flex items-center justify-center p-6 cursor-pointer"
+  >
+    <button
+      onClick={() => setSelectedImage(null)}
+      className="absolute top-6 right-6 border border-white/20 px-4 py-2 rounded-xl hover:bg-white hover:text-black transition"
+    >
+      Close
+    </button>
 
+    <img
+      src={selectedImage.image_url}
+      alt={selectedImage.title || 'BANGERS gallery image'}
+      className="max-w-full max-h-full object-contain rounded-2xl"
+    />
+  </div>
+)}
         <div className="text-center bg-neutral-950 border border-white/10 rounded-[2rem] p-10">
           <h2 className="text-4xl md:text-5xl font-extralight mb-6">
             Like the style?
