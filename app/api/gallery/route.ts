@@ -40,12 +40,15 @@ export async function POST(request: Request) {
   const fileExt = file.name.split('.').pop();
   const fileName = `${Date.now()}-${Math.random().toString(36).slice(2)}.${fileExt}`;
 
-  const { error: uploadError } = await supabase.storage
-    .from('gallery')
-    .upload(fileName, file, {
-      contentType: file.type,
-      upsert: false,
-    });
+const arrayBuffer = await file.arrayBuffer();
+const buffer = Buffer.from(arrayBuffer);
+
+const { error: uploadError } = await supabase.storage
+  .from('gallery')
+  .upload(fileName, buffer, {
+    contentType: file.type || 'image/jpeg',
+    upsert: false,
+  });
 
   if (uploadError) {
     return NextResponse.json({ error: uploadError.message }, { status: 500 });
