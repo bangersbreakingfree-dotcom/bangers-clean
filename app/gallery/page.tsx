@@ -26,7 +26,23 @@ export default function GalleryPage() {
 
     loadImages();
   }, []);
+  function showPreviousImage() {
+    if (!selectedImage) return;
 
+    const currentIndex = images.findIndex((image) => image.id === selectedImage.id);
+    const previousIndex = currentIndex === 0 ? images.length - 1 : currentIndex - 1;
+
+    setSelectedImage(images[previousIndex]);
+  }
+
+  function showNextImage() {
+    if (!selectedImage) return;
+
+    const currentIndex = images.findIndex((image) => image.id === selectedImage.id);
+    const nextIndex = currentIndex === images.length - 1 ? 0 : currentIndex + 1;
+
+    setSelectedImage(images[nextIndex]);
+  }
   return (
     <main className="min-h-screen bg-black text-white px-6 py-20">
       <section className="max-w-7xl mx-auto">
@@ -91,6 +107,26 @@ export default function GalleryPage() {
     >
       Close
     </button>
+    
+    <button
+  onClick={(e) => {
+    e.stopPropagation();
+    showPreviousImage();
+  }}
+  className="absolute left-6 top-1/2 -translate-y-1/2 border border-white/20 px-4 py-3 rounded-xl hover:bg-white hover:text-black transition"
+>
+  ←
+</button>
+    
+    <button
+  onClick={(e) => {
+    e.stopPropagation();
+    showNextImage();
+  }}
+  className="absolute right-6 top-1/2 -translate-y-1/2 border border-white/20 px-4 py-3 rounded-xl hover:bg-white hover:text-black transition"
+>
+  →
+</button>
 
     <img
       src={selectedImage.image_url}
