@@ -70,8 +70,7 @@ export default function GalleryPage() {
                   index % 5 === 0 ? 'md:row-span-2' : ''
                 }`}
               >
-             <img
-  <img
+     <img
   src={image.image_url}
   alt={image.title || `BANGERS gallery example ${index + 1}`}
   onClick={() => setSelectedImage(image)}
