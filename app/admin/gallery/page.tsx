@@ -57,7 +57,27 @@ formData.append('sort_order', sortOrder || '0');
     setMessage('Image added.');
     loadImages();
   }
+async function deleteImage(id: number) {
+  const confirmed = window.confirm('Delete this gallery image?');
 
+  if (!confirmed) return;
+
+  const response = await fetch('/api/admin/gallery', {
+    method: 'DELETE',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ id }),
+  });
+
+  const result = await response.json();
+
+  if (!response.ok) {
+    setMessage(result.error || 'Unable to delete image.');
+    return;
+  }
+
+  setMessage('Image deleted.');
+  loadImages();
+}
   return (
     <main className="min-h-screen bg-black text-white px-6 py-20">
       <section className="max-w-5xl mx-auto">
@@ -107,22 +127,31 @@ formData.append('sort_order', sortOrder || '0');
         </form>
 
         <div className="bg-neutral-950 border border-white/10 rounded-[2rem] overflow-hidden">
-          <div className="grid grid-cols-4 gap-4 px-6 py-4 text-xs uppercase tracking-[0.2em] text-neutral-500 border-b border-white/10">
+          <div className="grid grid-cols-5 gap-4 px-6 py-4 text-xs uppercase tracking-[0.2em] text-neutral-500 border-b border-white/10">
             <div>ID</div>
             <div>Title</div>
             <div>Image URL</div>
             <div>Sort Order</div>
+            <div>Actions</div>
           </div>
 
           {images.map((image) => (
             <div
               key={image.id}
-              className="grid grid-cols-4 gap-4 px-6 py-4 border-b border-white/10 text-sm"
+              className="grid grid-cols-5 gap-4 px-6 py-4 border-b border-white/10 text-sm"
             >
               <div>{image.id}</div>
               <div>{image.title || '—'}</div>
               <div className="break-all text-neutral-400">{image.image_url}</div>
               <div>{image.sort_order ?? '—'}</div>
+              <div>
+  <button
+    onClick={() => deleteImage(image.id)}
+    className="border border-red-500/40 text-red-300 px-4 py-2 rounded-xl hover:bg-red-500 hover:text-white transition"
+  >
+    Delete
+  </button>
+</div>
             </div>
           ))}
         </div>
