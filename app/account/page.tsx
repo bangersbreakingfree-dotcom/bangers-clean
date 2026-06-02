@@ -13,6 +13,7 @@ export default function AccountPage() {
   const [planName, setPlanName] = useState<string | null>(null);
   const [printSize, setPrintSize] = useState<string | null>(null);
   const [nextChargeDate, setNextChargeDate] = useState<string | null>(null);
+  const [termsAccepted, setTermsAccepted] = useState(false);
 
   useEffect(() => {
     async function loadUser() {
@@ -55,6 +56,10 @@ export default function AccountPage() {
   }
 
   async function signUp() {
+    if (!termsAccepted) {
+  setMessage('You must agree to the Terms & Licensing Agreement before creating an account.');
+  return;
+}
     setMessage('Creating account...');
 
     const { error } = await supabase.auth.signUp({
@@ -264,13 +269,28 @@ export default function AccountPage() {
           </button>
         </form>
 
+        <label className="flex items-start gap-3 text-sm text-neutral-300 mt-6">
+  <input
+    type="checkbox"
+    checked={termsAccepted}
+    onChange={(e) => setTermsAccepted(e.target.checked)}
+    className="mt-1"
+  />
+  <span>
+    I have read and agree to the{' '}
+    <a href="/terms" className="underline text-white" target="_blank">
+      BANGERS Terms & Licensing Agreement
+    </a>
+    .
+  </span>
+</label>
         <button
-          onClick={signUp}
-          className="w-full mt-4 border border-white/20 py-5 rounded-2xl text-lg hover:bg-white hover:text-black transition"
-        >
-          Create Account
-        </button>
-
+  onClick={signUp}
+  disabled={!termsAccepted}
+  className="w-full mt-4 border border-white/20 py-5 rounded-2xl text-lg hover:bg-white hover:text-black transition disabled:opacity-40 disabled:cursor-not-allowed"
+>
+  Create Account
+</button>
         {message && <p className="text-neutral-300 mt-6">{message}</p>}
       </section>
     </main>
