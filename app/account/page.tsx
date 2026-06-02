@@ -62,7 +62,7 @@ export default function AccountPage() {
 }
     setMessage('Creating account...');
 
-    const { error } = await supabase.auth.signUp({
+    const { data, error } = await supabase.auth.signUp({
       email,
       password,
       options: {
@@ -75,6 +75,11 @@ export default function AccountPage() {
       return;
     }
 
+    await fetch('/api/terms-acceptance', {
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify({ email }),
+});
     setMessage('Account created. Check your email to confirm it, then log in.');
   }
 
