@@ -13,6 +13,9 @@ export default function AccountPage() {
   const [planName, setPlanName] = useState<string | null>(null);
   const [printSize, setPrintSize] = useState<string | null>(null);
   const [nextChargeDate, setNextChargeDate] = useState<string | null>(null);
+  const nextShipmentDate = nextChargeDate
+  ? new Date(new Date(nextChargeDate).getTime() + 16 * 24 * 60 * 60 * 1000)
+  : null;
   const [termsAccepted, setTermsAccepted] = useState(false);
 
   useEffect(() => {
@@ -176,7 +179,16 @@ export default function AccountPage() {
 
             <div className="bg-neutral-950 border border-white/10 rounded-2xl p-5">
               <p className="text-neutral-500 uppercase tracking-[0.2em] text-xs mb-3">Next Shipment Date</p>
-              <p className="text-2xl font-extralight">July 1, 2026</p>
+              <p className="text-2xl font-extralight">
+  {nextShipmentDate
+    ? nextShipmentDate.toLocaleDateString('en-US', {
+        month: 'long',
+        day: 'numeric',
+        year: 'numeric',
+        timeZone: 'UTC',
+      })
+    : '—'}
+</p>
             </div>
           </div>
 
