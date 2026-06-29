@@ -129,6 +129,21 @@ async function sendOwnerPurchaseEmail(subscription: Stripe.Subscription) {
   dateStyle: 'full',
   timeStyle: 'short',
 });
+  let subscriberNumber = 'Unknown';
+
+const supabase = getSupabaseAdmin();
+
+if (supabase) {
+ const { count } = await supabase
+  .from('customer_profiles')
+  .select('*', { count: 'exact', head: true })
+  .eq('subscription_status', 'active');
+    
+
+  if (typeof count === 'number') {
+    subscriberNumber = `#${count}`;
+  }
+}
 
   await fetch('https://api.resend.com/emails', {
     method: 'POST',
@@ -142,7 +157,10 @@ async function sendOwnerPurchaseEmail(subscription: Stripe.Subscription) {
      subject: `🎉 New ${membershipName} ${billingCycle} Member!`,
       html: `
         <div style="font-family: Arial, sans-serif; max-width: 620px; margin: 0 auto; padding: 24px; color: #111111;">
-          <h2>New BANGERS purchase</h2>
+          <h2>🎉 Welcome, ${customerName}!</h2>
+          <p style="font-size:20px;font-weight:bold;color:#16a34a;margin-bottom:24px;">
+  🎉 This is your ${subscriberNumber} active BANGERS member!
+</p>
           <p><strong>Customer name:</strong> ${customerName}</p>
           <p><strong>Customer email:</strong> ${customerEmail}</p>
           <p><strong>Membership:</strong> ${membershipName}</p>
