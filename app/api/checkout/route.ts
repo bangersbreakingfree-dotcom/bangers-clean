@@ -1,3 +1,4 @@
+import { createClient } from '@/lib/supabase/server';
 import { NextResponse } from 'next/server';
 import Stripe from 'stripe';
 import { plans } from '@/lib/plans';
@@ -21,6 +22,7 @@ export async function POST(request: Request) {
     if (!process.env.STRIPE_SECRET_KEY || process.env.STRIPE_SECRET_KEY.includes('replace_me')) {
       return NextResponse.json({ error: 'Stripe is not connected yet. Add real Stripe keys in Vercel.' }, { status: 400 });
     }
+
 
     const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, { apiVersion: '2024-06-20' });
     const body = await request.json();
