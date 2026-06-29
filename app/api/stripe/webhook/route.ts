@@ -102,6 +102,40 @@ async function sendCancellationEmail(subscription: Stripe.Subscription) {
     }),
   });
 }
+async function sendOwnerPurchaseEmail(subscription: Stripe.Subscription) {
+  if (!process.env.RESEND_API_KEY || !process.env.OWNER_EMAIL) {
+    console.log('RESEND_API_KEY or OWNER_EMAIL not set. Skipping owner purchase email.');
+    return;
+  }
+
+  const customerEmail = subscription.metadata.email || 'Unknown customer';
+  const membershipName = subscription.metadata.membershipName || 'Unknown membership';
+  const printSize = subscription.metadata.printSize || 'Unknown print size';
+  const billingCycle = subscription.metadata.billingCycle || 'Unknown billing cycle';
+
+  await fetch('https://api.resend.com/emails', {
+    method: 'POST',
+    headers: {
+      Authorization: `Bearer ${process.env.RESEND_API_KEY}`,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      from: 'BANGERS Orders <membership@bangersprints.com>',
+      to: process.env.OWNER_EMAIL,
+      subject: 'New BANGERS Purchase',
+      html: `
+        <div style="font-family: Arial, sans-serif; max-width: 620px; margin: 0 auto; padding: 24px; color: #111111;">
+          <h2>New BANGERS purchase</h2>
+          <p><strong>Customer email:</strong> ${customerEmail}</p>
+          <p><strong>Membership:</strong> ${membershipName}</p>
+          <p><strong>Print size:</strong> ${printSize}</p>
+          <p><strong>Billing cycle:</strong> ${billingCycle}</p>
+          <p><strong>Stripe subscription ID:</strong> ${subscription.id}</p>
+        </div>
+      `,
+    }),
+  });
+}
 async function sendWelcomeEmail(subscription: Stripe.Subscription) {
   if (!process.env.RESEND_API_KEY) {
     console.log('RESEND_API_KEY not set. Skipping welcome email.');
@@ -315,6 +349,7 @@ export async function POST(request: Request) {
     await syncSubscription(subscription, session.metadata || {});
 
     await sendWelcomeEmail(subscription);
+    await sendOwnerPurchaseEmail(subscription);
   }
 }
 
