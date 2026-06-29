@@ -109,9 +109,26 @@ async function sendOwnerPurchaseEmail(subscription: Stripe.Subscription) {
   }
 
   const customerEmail = subscription.metadata.email || 'Unknown customer';
+  let customerName = 'Unknown';
+  if (subscription.customer) {
+  const customer = await stripe.customers.retrieve(
+    typeof subscription.customer === 'string'
+      ? subscription.customer
+      : subscription.customer.id
+  );
+
+  if (!customer.deleted) {
+    customerName = customer.name || 'Unknown';
+  }
+}
   const membershipName = subscription.metadata.membershipName || 'Unknown membership';
   const printSize = subscription.metadata.printSize || 'Unknown print size';
   const billingCycle = subscription.metadata.billingCycle || 'Unknown billing cycle';
+  
+  const purchaseDate = new Date().toLocaleString('en-US', {
+  dateStyle: 'full',
+  timeStyle: 'short',
+});
 
   await fetch('https://api.resend.com/emails', {
     method: 'POST',
@@ -122,14 +139,16 @@ async function sendOwnerPurchaseEmail(subscription: Stripe.Subscription) {
     body: JSON.stringify({
       from: 'BANGERS Orders <membership@bangersprints.com>',
       to: process.env.OWNER_EMAIL,
-      subject: 'New BANGERS Purchase',
+     subject: `🎉 New ${membershipName} ${billingCycle} Member!`,
       html: `
         <div style="font-family: Arial, sans-serif; max-width: 620px; margin: 0 auto; padding: 24px; color: #111111;">
           <h2>New BANGERS purchase</h2>
+          <p><strong>Customer name:</strong> ${customerName}</p>
           <p><strong>Customer email:</strong> ${customerEmail}</p>
           <p><strong>Membership:</strong> ${membershipName}</p>
           <p><strong>Print size:</strong> ${printSize}</p>
           <p><strong>Billing cycle:</strong> ${billingCycle}</p>
+          <p><strong>Purchase date:</strong> ${purchaseDate}</p>
           <p><strong>Stripe subscription ID:</strong> ${subscription.id}</p>
         </div>
       `,
