@@ -33,6 +33,11 @@ const enrollmentCloses = 'March 15, 2026';
   try {
     const authResult = await supabase.auth.getUser();
     const user = authResult.data.user;
+    if (!user) {
+  alert('Please create an account or log in before purchasing.');
+  window.location.href = '/account';
+  return;
+}
 
     const response = await fetch('/api/checkout', {
       method: 'POST',
