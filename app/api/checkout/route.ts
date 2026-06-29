@@ -7,7 +7,6 @@ function getNextEnrollmentTrialEnd() {
   const year = now.getFullYear();
 
   const releases = [
-    const releases = [
   {
     cutoff: new Date(year, 2, 15, 23, 59, 59),
     release: new Date(year, 2, 15, 23, 59, 59),
