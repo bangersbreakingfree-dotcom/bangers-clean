@@ -19,6 +19,7 @@ export type SiteContent = {
   founder_title: string;
   founder_subtitle: string;
   founder_image_url: string;
+  founder_portrait_url: string;
   founder_story_heading: string;
   founder_story: string;
   founder_video_heading: string;
@@ -60,6 +61,7 @@ export const fallbackContent: SiteContent = {
   founder_subtitle:
     "Hi, I'm Sawyer. I created BANGERS because I wanted incredible travel photography to be experienced the way it was meant to be—printed, displayed, and collected.",
   founder_image_url: '/founder.jpg',
+  founder_portrait_url: '/founder.jpg',
   founder_story_heading: 'Why BANGERS exists',
   founder_story:
     'I fell in love with photography because it lets us hold onto moments that disappear in seconds. Standing beneath mountains, watching wildlife, exploring remote places... those experiences deserve more than another forgotten image on a phone.\n\nSomewhere along the way I realized something: thousands of incredible photographs are taken every day, but almost none of them ever become real prints.\n\nBANGERS changes that.\n\nEvery quarter I release a single photograph. That’s it. No massive catalog. No unlimited downloads. Just one image I believe deserves a permanent place on your wall.',
