@@ -449,13 +449,21 @@ const enrollmentCloses = 'March 15, 2026';
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6">
           <div>
             <h3 className="text-2xl tracking-[0.35em] font-light mb-2">BANGERS</h3>
-            <p className="text-neutral-500">Exclusive fine art travel photography.</p>
+            <p className="text-neutral-500">Exclusive fine art travel photography.
+              <p className="text-neutral-400 max-w-md leading-7">
+  One extraordinary photograph. Released quarterly.
+  Printed by hand. Never sold publicly.
+</p>
           </div>
 
           <div className="flex gap-8 text-neutral-400 uppercase tracking-[0.2em] text-sm">
-            <a href="#membership">Membership</a>
-            <a href="#faq">FAQ</a>
-            <a href="mailto:hello@bangersprints.com">Contact</a>
+            <a href="/behind-the-lens">Behind the Lens</a>
+
+<a href="/gallery">Gallery</a>
+
+<a href="#faq">FAQ</a>
+
+<a href="mailto:hello@bangersprints.com">Contact</a>
           </div>
         </div>
       </footer>
