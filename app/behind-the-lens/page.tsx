@@ -42,6 +42,23 @@ export default async function FounderPage() {
 
   return (
     <main className="bg-black text-white">
+      <div className="fixed top-0 left-0 right-0 z-50 border-b border-white/10 bg-black/60 backdrop-blur-xl">
+  <div className="max-w-7xl mx-auto px-6 py-5 flex items-center justify-between">
+    <a href="/" className="text-lg tracking-[0.45em] font-light">
+      BANGERS
+    </a>
+
+    <div className="flex items-center gap-6 text-xs uppercase tracking-[0.25em] text-neutral-300">
+      <a href="/" className="hover:text-white transition">
+        Home
+      </a>
+
+      <a href="/#membership" className="hover:text-white transition">
+        Membership
+      </a>
+    </div>
+  </div>
+</div>
       <section
         className="min-h-screen flex items-center px-6 py-32 bg-cover bg-center relative"
         style={{ backgroundImage: `url(${content.founder_image_url})` }}
