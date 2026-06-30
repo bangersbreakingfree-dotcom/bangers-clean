@@ -101,12 +101,21 @@ export async function POST(request: Request) {
       'experience_text',
       'experience_image_url',
 
-      'founder_heading',
-      'founder_intro',
-      'founder_story',
-      'founder_video',
-      'founder_image_url',
-      'founder_portrait_url'
+    'founder_kicker',
+'founder_title',
+'founder_subtitle',
+'founder_image_url',
+'founder_story_heading',
+'founder_story',
+'founder_video_heading',
+'founder_youtube_url',
+'founder_camera',
+'founder_lens',
+'founder_drone',
+'founder_printing',
+'founder_closing_title',
+'founder_closing_text',
+'founder_signature',
     ];
 
     for (const key of fields) {
