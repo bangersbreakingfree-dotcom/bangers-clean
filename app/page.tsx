@@ -76,8 +76,8 @@ const enrollmentCloses = 'March 15, 2026';
     </a>
 
     <nav className="hidden md:flex items-center gap-10 text-sm uppercase tracking-[0.2em] text-neutral-300">
-      <a href="#concept" className="hover:text-white transition">Concept</a>
-      <a href="#membership" className="hover:text-white transition">Membership</a>
+      <a href="#The Print" className="hover:text-white transition">Concept</a>
+      <a href="#Join" className="hover:text-white transition">Membership</a>
       <a href="/behind-the-lens" className="hover:text-white transition">Behind the Lens</a>
       <a href="#experience" className="hover:text-white transition">Experience</a>
       <a href="#faq" className="hover:text-white transition">FAQ</a>
@@ -108,7 +108,7 @@ const enrollmentCloses = 'March 15, 2026';
     )}
 
     <a href="#membership" className="border border-white/20 px-5 py-2 rounded-xl hover:bg-white hover:text-black transition">
-      Join
+      Become a Member
     </a>
   </div>
 </header>
