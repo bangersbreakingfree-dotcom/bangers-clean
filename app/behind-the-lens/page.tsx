@@ -166,25 +166,63 @@ export default async function FounderPage() {
         </div>
       </section>
 
-      <section className="px-6 py-32">
-        <div className="max-w-4xl mx-auto text-center">
-          <p className="uppercase tracking-[0.35em] text-amber-300 text-sm mb-6">
-            The Reason I Do This
-          </p>
+    <section className="relative overflow-hidden py-44 px-6">
+  <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(251,191,36,0.08),transparent_55%)]" />
 
-          <h2 className="text-5xl md:text-7xl font-extralight leading-tight mb-10">
-            {content.founder_closing_title}
-          </h2>
+  <div className="relative max-w-5xl mx-auto text-center">
 
-          <p className="text-xl text-neutral-300 leading-9 mb-10">
-            {content.founder_closing_text}
-          </p>
+    <p className="uppercase tracking-[0.45em] text-amber-300 text-sm mb-8">
+      The Philosophy
+    </p>
 
-          <p className="text-2xl text-amber-300 italic">
-            {content.founder_signature}
-          </p>
-        </div>
-      </section>
+    <h2 className="text-6xl md:text-8xl font-extralight leading-none mb-16">
+      {content.founder_manifesto_headline}
+    </h2>
+
+    <div className="space-y-6 mb-20">
+
+      <div className="text-5xl md:text-7xl font-extralight">
+        {content.founder_manifesto_line_1}
+      </div>
+
+      <div className="text-5xl md:text-7xl font-extralight">
+        {content.founder_manifesto_line_2}
+      </div>
+
+      <div className="text-5xl md:text-7xl font-extralight">
+        {content.founder_manifesto_line_3}
+      </div>
+
+    </div>
+
+    <p className="max-w-3xl mx-auto text-xl leading-9 text-neutral-400 mb-14">
+      {content.founder_closing_text}
+    </p>
+
+    <div className="flex flex-col sm:flex-row gap-5 justify-center">
+
+      <a
+        href="/#membership"
+        className="bg-white text-black rounded-full px-10 py-5 text-lg hover:bg-amber-300 transition-all duration-300"
+      >
+        Become a Member
+      </a>
+
+      <a
+        href="/"
+        className="border border-white/20 rounded-full px-10 py-5 text-lg hover:bg-white hover:text-black transition-all duration-300"
+      >
+        Back Home
+      </a>
+
+    </div>
+
+    <p className="mt-20 text-2xl italic text-amber-300">
+      {content.founder_signature}
+    </p>
+
+  </div>
+</section>
     </main>
   );
 }
