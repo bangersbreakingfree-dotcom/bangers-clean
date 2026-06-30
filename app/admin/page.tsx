@@ -106,6 +106,16 @@ export default function AdminPage() {
             <Input label="Title" value={content.founder_title} onChange={(v) => field('founder_title', v)} />
             <Text label="Subtitle" value={content.founder_subtitle} onChange={(v) => field('founder_subtitle', v)} />
             <File name="founder_image" label="Upload Founder Image" />
+            <File
+  name="founder_portrait"
+  label="Upload Founder Portrait"
+/>
+
+<Input
+  label="Founder Portrait URL"
+  value={content.founder_portrait_url}
+  onChange={(v) => field('founder_portrait_url', v)}
+/>
             <Input label="Founder Image URL" value={content.founder_image_url} onChange={(v) => field('founder_image_url', v)} />
             <Input label="Story Heading" value={content.founder_story_heading} onChange={(v) => field('founder_story_heading', v)} />
             <Text label="Founder Story" value={content.founder_story} onChange={(v) => field('founder_story', v)} />
