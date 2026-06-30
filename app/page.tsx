@@ -74,14 +74,12 @@ const enrollmentCloses = 'March 15, 2026';
           <a href="#" className="text-2xl tracking-[0.35em] font-light">BANGERS</a>
 
           <nav className="hidden md:flex items-center gap-10 text-sm uppercase tracking-[0.2em] text-neutral-300">
-            <a href="#concept" className="hover:text-white transition">Concept</a>
-            <a href="#membership" className="hover:text-white transition">Membership</a>
-            <a href="/behind-the-lens" className="hover:text-white transition">Behind the Lens</a>
-            <a href="#experience" className="hover:text-white transition">Experience</a>
-            <a href="#faq" className="hover:text-white transition">FAQ</a>
-            <a href="/gallery">Gallery</a>
-            <a href="/account" className="hover:text-white transition">Account</a>
-          </nav>
+  <a href="#membership" className="hover:text-white transition">Membership</a>
+  <a href="/behind-the-lens" className="hover:text-white transition">Behind the Lens</a>
+  <a href="/gallery" className="hover:text-white transition">Gallery</a>
+  <a href="#faq" className="hover:text-white transition">FAQ</a>
+  <a href="/account" className="hover:text-white transition">Account</a>
+</nav>
           <button
   type="button"
   onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
@@ -92,14 +90,13 @@ const enrollmentCloses = 'March 15, 2026';
           {mobileMenuOpen && (
   <div className="absolute top-full left-0 right-0 bg-black border-t border-white/10 md:hidden">
     <div className="flex flex-col p-6 gap-4 text-sm uppercase tracking-[0.2em] text-neutral-300">
-      <a href="#experience">Experience</a>
-      <a href="/behind-the-lens">Behind the Lens</a>
-      <a href="#membership">Membership</a>
-      <a href="/gallery">Gallery</a>
-      <a href="#faq">FAQ</a>
-      <a href="/account">Account</a>
-    </div>
-  </div>
+      <div className="flex flex-col p-6 gap-4 text-sm uppercase tracking-[0.2em] text-neutral-300">
+  <a href="#membership">Membership</a>
+  <a href="/behind-the-lens">Behind the Lens</a>
+  <a href="/gallery">Gallery</a>
+  <a href="#faq">FAQ</a>
+  <a href="/account">Account</a>
+</div>
 )}
 
           <a href="#membership" className="border border-white/20 px-5 py-2 rounded-xl hover:bg-white hover:text-black transition">Join</a>
