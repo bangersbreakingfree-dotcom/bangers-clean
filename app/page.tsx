@@ -406,6 +406,38 @@ const enrollmentCloses = 'March 15, 2026';
         </div>
       </section>
 
+      <section className="relative py-40 overflow-hidden border-t border-white/10">
+  <div
+    className="absolute inset-0 bg-cover bg-center opacity-25"
+    style={{ backgroundImage: `url(${content.founder_image_url})` }}
+  />
+
+  <div className="absolute inset-0 bg-gradient-to-t from-black via-black/80 to-black/70" />
+
+  <div className="relative max-w-5xl mx-auto px-6 text-center">
+    <p className="uppercase tracking-[0.35em] text-amber-300 text-sm mb-6">
+      Behind the Lens
+    </p>
+
+    <h2 className="text-5xl md:text-7xl font-extralight leading-tight mb-8">
+      Every photograph has a story.
+    </h2>
+
+    <p className="max-w-3xl mx-auto text-xl text-neutral-300 leading-9 mb-12">
+      The hike before sunrise. The missed flights. The storms. The wildlife.
+      The moments that almost never happened.
+      <br /><br />
+      Come behind the lens and experience the journey behind every print.
+    </p>
+
+    <a
+      href="/behind-the-lens"
+      className="inline-flex items-center border border-white/20 px-10 py-5 rounded-full hover:bg-white hover:text-black transition text-lg"
+    >
+      Explore Behind the Lens →
+    </a>
+  </div>
+</section>
       <footer className="border-t border-white/10 py-12 px-6">
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6">
           <div>
