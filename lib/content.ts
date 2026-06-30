@@ -30,6 +30,10 @@ export type SiteContent = {
   founder_printing: string;
   founder_closing_title: string;
   founder_closing_text: string;
+  founder_manifesto_headline: string;
+founder_manifesto_line_1: string;
+founder_manifesto_line_2: string;
+founder_manifesto_line_3: string;
   founder_signature: string;
 };
 
@@ -73,6 +77,10 @@ export const fallbackContent: SiteContent = {
   founder_printing: 'Canon imagePROGRAF + archival fine art paper.',
   founder_closing_title: 'Thanks for being here.',
   founder_closing_text:
+    founder_manifesto_headline: 'Photography deserves better than a hard drive.',
+founder_manifesto_line_1: 'Print it.',
+founder_manifesto_line_2: 'Frame it.',
+founder_manifesto_line_3: 'Live with it.',
     "Whether you become a member or simply enjoy following the journey, thank you for supporting independent photography. I can't wait to share what's coming next.",
   founder_signature: '— Sawyer',
 };
