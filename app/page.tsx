@@ -65,7 +65,6 @@ const enrollmentCloses = 'March 15, 2026';
     );
     setLoading(false);
   }
-}
 
   return (
     <main className="bg-black text-white min-h-screen overflow-hidden">
