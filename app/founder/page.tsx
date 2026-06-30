@@ -1,234 +1,168 @@
-export default function FounderPage() {
+import { fallbackContent } from '@/lib/content';
+
+function getYouTubeEmbedUrl(url: string) {
+  if (!url) return '';
+
+  try {
+    const parsed = new URL(url);
+
+    if (parsed.hostname.includes('youtu.be')) {
+      return `https://www.youtube.com/embed/${parsed.pathname.replace('/', '')}`;
+    }
+
+    if (parsed.hostname.includes('youtube.com')) {
+      const videoId = parsed.searchParams.get('v');
+      if (videoId) return `https://www.youtube.com/embed/${videoId}`;
+    }
+
+    return url;
+  } catch {
+    return url;
+  }
+}
+
+export default async function FounderPage() {
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://bangersprints.com';
+
+  let content = fallbackContent;
+
+  try {
+    const res = await fetch(`${siteUrl}/api/content`, { cache: 'no-store' });
+    const data = await res.json();
+    content = { ...fallbackContent, ...data };
+  } catch {
+    content = fallbackContent;
+  }
+
+  const youtubeEmbedUrl = getYouTubeEmbedUrl(content.founder_youtube_url);
+
+  const storyParagraphs = content.founder_story
+    .split('\n')
+    .filter((paragraph) => paragraph.trim().length > 0);
+
   return (
     <main className="bg-black text-white">
+      <section
+        className="min-h-screen flex items-center px-6 py-32 bg-cover bg-center relative"
+        style={{ backgroundImage: `url(${content.founder_image_url})` }}
+      >
+        <div className="absolute inset-0 bg-black/60" />
 
-      {/* HERO */}
+        <div className="relative max-w-6xl mx-auto w-full">
+          <p className="uppercase tracking-[0.35em] text-amber-300 text-sm mb-6">
+            {content.founder_kicker}
+          </p>
 
-      <section className="min-h-[85vh] flex items-center justify-center px-6">
-        <div className="max-w-6xl w-full grid lg:grid-cols-2 gap-20 items-center">
+          <h1 className="text-6xl md:text-8xl font-extralight leading-none max-w-4xl mb-8">
+            {content.founder_title}
+          </h1>
 
+          <p className="text-xl text-neutral-200 leading-9 max-w-2xl">
+            {content.founder_subtitle}
+          </p>
+        </div>
+      </section>
+
+      <section className="grid lg:grid-cols-2 border-y border-white/10">
+        <div className="min-h-[650px] bg-cover bg-center" style={{ backgroundImage: `url(${content.founder_image_url})` }} />
+
+        <div className="px-8 md:px-20 py-28 flex items-center">
           <div>
-            <p className="uppercase tracking-[0.35em] text-neutral-500 text-sm mb-6">
-              Meet the Founder
+            <p className="uppercase tracking-[0.35em] text-amber-300 text-sm mb-6">
+              My Story
             </p>
 
-            <h1 className="text-6xl md:text-7xl font-extralight leading-none mb-8">
-              Every print begins
-              <br />
-              with a story.
-            </h1>
+            <h2 className="text-5xl md:text-6xl font-extralight mb-10">
+              {content.founder_story_heading}
+            </h2>
 
-            <p className="text-xl text-neutral-300 leading-9 max-w-xl">
-              Hi, I'm Sawyer.
-              I created BANGERS because I wanted incredible travel photography
-              to be experienced the way it was meant to be—
-              printed, displayed, and collected.
-            </p>
-          </div>
-
-          <div className="flex justify-center">
-            <div className="rounded-[3rem] overflow-hidden border border-white/10 bg-neutral-900">
-              <img
-                src="/founder.jpg"
-                alt="Founder"
-                className="w-[500px] h-[650px] object-cover"
-              />
+            <div className="space-y-7 text-lg text-neutral-300 leading-9">
+              {storyParagraphs.map((paragraph) => (
+                <p key={paragraph}>{paragraph}</p>
+              ))}
             </div>
           </div>
-
         </div>
       </section>
 
+      <section className="px-6 py-28 bg-neutral-950">
+        <div className="max-w-6xl mx-auto grid lg:grid-cols-2 gap-16 items-center">
+          <div>
+            <p className="uppercase tracking-[0.35em] text-amber-300 text-sm mb-6">
+              Come Behind the Lens
+            </p>
 
-      {/* STORY */}
+            <h2 className="text-5xl md:text-6xl font-extralight mb-8">
+              {content.founder_video_heading}
+            </h2>
 
-      <section className="max-w-5xl mx-auto px-6 py-28">
+            <p className="text-lg text-neutral-400 leading-8 mb-8">
+              Every image has a story behind it. Come travel with me and see how they’re made.
+            </p>
+          </div>
 
-        <h2 className="text-5xl font-extralight mb-10">
-          Why BANGERS exists
-        </h2>
-
-        <div className="space-y-8 text-xl text-neutral-300 leading-10">
-
-          <p>
-            I fell in love with photography because it lets us hold onto moments
-            that disappear in seconds. Standing beneath mountains,
-            watching wildlife, exploring remote places...
-            those experiences deserve more than another forgotten image on a phone.
-          </p>
-
-          <p>
-            Somewhere along the way I realized something:
-            thousands of incredible photographs are taken every day,
-            but almost none of them ever become real prints.
-          </p>
-
-          <p>
-            BANGERS changes that.
-          </p>
-
-          <p>
-            Every quarter I release a single photograph.
-            That's it.
-            No massive catalog.
-            No unlimited downloads.
-            Just one image I believe deserves a permanent place on your wall.
-          </p>
-
-        </div>
-
-      </section>
-
-
-      {/* VIDEO */}
-
-      <section className="px-6 py-20">
-
-        <div className="max-w-6xl mx-auto">
-
-          <h2 className="text-5xl font-extralight mb-10">
-            Come behind the lens
-          </h2>
-
-          <div className="rounded-[2rem] overflow-hidden border border-white/10">
-
+          <div className="rounded-[2rem] overflow-hidden border border-white/10 bg-black">
             <div className="aspect-video">
-              <iframe
-                className="w-full h-full"
-                src="https://www.youtube.com/embed/dQw4w9WgXcQ"
-                title="Founder Video"
-                allowFullScreen
-              />
+              {youtubeEmbedUrl ? (
+                <iframe
+                  className="w-full h-full"
+                  src={youtubeEmbedUrl}
+                  title="Founder Video"
+                  allowFullScreen
+                />
+              ) : (
+                <div className="w-full h-full flex items-center justify-center text-neutral-500">
+                  Add a YouTube URL in Admin
+                </div>
+              )}
             </div>
-
           </div>
-
         </div>
-
       </section>
 
+      <section className="px-6 py-24 border-y border-white/10">
+        <div className="max-w-6xl mx-auto">
+          <p className="uppercase tracking-[0.35em] text-amber-300 text-sm text-center mb-14">
+            The Gear I Trust
+          </p>
 
-      {/* VALUES */}
-
-      <section className="max-w-6xl mx-auto px-6 py-28">
-
-        <h2 className="text-5xl font-extralight mb-16">
-          What every member receives
-        </h2>
-
-        <div className="grid md:grid-cols-3 gap-8">
-
-          {[
-            {
-              title: "One Exclusive Release",
-              body:
-                "Only one photograph is released each quarter, making every collection intentional.",
-            },
-            {
-              title: "Museum Quality",
-              body:
-                "Every print is produced on premium archival paper built to last for decades.",
-            },
-            {
-              title: "Personally Curated",
-              body:
-                "Every image is selected, prepared, and released by me—not an algorithm.",
-            },
-          ].map((item) => (
-            <div
-              key={item.title}
-              className="border border-white/10 rounded-[2rem] p-10 bg-neutral-950"
-            >
-              <h3 className="text-2xl font-light mb-5">
-                {item.title}
-              </h3>
-
-              <p className="text-neutral-400 leading-8">
-                {item.body}
-              </p>
-            </div>
-          ))}
-
-        </div>
-
-      </section>
-
-
-      {/* GEAR */}
-
-      <section className="px-6 py-28">
-
-        <div className="max-w-6xl mx-auto border border-white/10 rounded-[2rem] p-12 bg-neutral-950">
-
-          <h2 className="text-5xl font-extralight mb-12">
-            My current setup
-          </h2>
-
-          <div className="grid md:grid-cols-2 gap-10 text-lg">
-
-            <div>
-              <p className="uppercase tracking-[0.25em] text-neutral-500 mb-2">
-                Camera
-              </p>
-
-              <p>Sony A7 IV</p>
-            </div>
-
-            <div>
-              <p className="uppercase tracking-[0.25em] text-neutral-500 mb-2">
-                Favorite Lens
-              </p>
-
-              <p>Sony 24–70mm GM II</p>
-            </div>
-
-            <div>
-              <p className="uppercase tracking-[0.25em] text-neutral-500 mb-2">
-                Drone
-              </p>
-
-              <p>DJI Mini Series</p>
-            </div>
-
-            <div>
-              <p className="uppercase tracking-[0.25em] text-neutral-500 mb-2">
-                Printing
-              </p>
-
-              <p>Canon imagePROGRAF + archival fine art paper.</p>
-            </div>
-
+          <div className="grid md:grid-cols-4 gap-8 text-center">
+            {[
+              ['Camera', content.founder_camera],
+              ['Lens', content.founder_lens],
+              ['Drone', content.founder_drone],
+              ['Printing', content.founder_printing],
+            ].map(([label, value]) => (
+              <div key={label} className="border border-white/10 rounded-[2rem] p-8 bg-neutral-950">
+                <p className="uppercase tracking-[0.25em] text-neutral-500 text-xs mb-4">
+                  {label}
+                </p>
+                <p className="text-xl font-light">{value}</p>
+              </div>
+            ))}
           </div>
-
         </div>
-
       </section>
 
-
-      {/* CLOSING */}
-
-      <section className="px-6 pb-40">
-
+      <section className="px-6 py-32">
         <div className="max-w-4xl mx-auto text-center">
+          <p className="uppercase tracking-[0.35em] text-amber-300 text-sm mb-6">
+            The Reason I Do This
+          </p>
 
-          <h2 className="text-6xl font-extralight mb-8">
-            Thanks for being here.
+          <h2 className="text-5xl md:text-7xl font-extralight leading-tight mb-10">
+            {content.founder_closing_title}
           </h2>
 
-          <p className="text-xl text-neutral-300 leading-9 mb-12">
-            Whether you become a member or simply enjoy following the journey,
-            thank you for supporting independent photography.
-            I can't wait to share what's coming next.
+          <p className="text-xl text-neutral-300 leading-9 mb-10">
+            {content.founder_closing_text}
           </p>
 
-          <p className="text-neutral-500 uppercase tracking-[0.3em]">
-            — Sawyer
+          <p className="text-2xl text-amber-300 italic">
+            {content.founder_signature}
           </p>
-
         </div>
-
       </section>
-
     </main>
   );
 }
