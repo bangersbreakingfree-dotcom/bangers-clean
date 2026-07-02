@@ -171,7 +171,6 @@ export default async function FounderPage() {
 
   <div className="relative max-w-5xl mx-auto text-center">
 
-    </p>
 
     <h2 className="text-6xl md:text-8xl font-extralight leading-none mb-16">
       {content.founder_manifesto_headline}
