@@ -133,6 +133,11 @@ export default function AdminPage() {
   onChange={(v) => field('founder_lens_label', v)}
 />
             <Input label="Lens" value={content.founder_lens} onChange={(v) => field('founder_lens', v)} />
+            <Input
+  label="Drone Label"
+  value={content.founder_drone_label}
+  onChange={(v) => field('founder_drone_label', v)}
+/>
             <Input label="Drone" value={content.founder_drone} onChange={(v) => field('founder_drone', v)} />
             <Input label="Printing" value={content.founder_printing} onChange={(v) => field('founder_printing', v)} />
             <Input label="Closing Title" value={content.founder_closing_title} onChange={(v) => field('founder_closing_title', v)} />
