@@ -170,28 +170,15 @@ export default async function FounderPage() {
   <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(251,191,36,0.08),transparent_55%)]" />
 
   <div className="relative max-w-5xl mx-auto text-center">
-
-
     <h2 className="text-6xl md:text-8xl font-extralight leading-none mb-16">
       {content.founder_manifesto_headline}
     </h2>
-
-      <div className="text-5xl md:text-7xl font-extralight">
-        {content.founder_manifesto_line_2}
-      </div>
-
-      <div className="text-5xl md:text-7xl font-extralight">
-        {content.founder_manifesto_line_3}
-      </div>
-
-    </div>
 
     <p className="max-w-3xl mx-auto text-xl leading-9 text-neutral-400 mb-14">
       {content.founder_closing_text}
     </p>
 
     <div className="flex flex-col sm:flex-row gap-5 justify-center">
-
       <a
         href="/#membership"
         className="bg-white text-black rounded-full px-10 py-5 text-lg hover:bg-amber-300 transition-all duration-300"
@@ -205,13 +192,11 @@ export default async function FounderPage() {
       >
         Back Home
       </a>
-
     </div>
 
     <p className="mt-20 text-2xl italic text-amber-300">
       {content.founder_signature}
     </p>
-
   </div>
 </section>
     </main>
