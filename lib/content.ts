@@ -24,6 +24,10 @@ export type SiteContent = {
   founder_story: string;
   founder_video_heading: string;
   founder_youtube_url: string;
+  founder_camera_label: string;
+founder_lens_label: string;
+founder_drone_label: string;
+founder_printing_label: string;
   founder_camera: string;
   founder_lens: string;
   founder_drone: string;
@@ -71,6 +75,10 @@ export const fallbackContent: SiteContent = {
     'I fell in love with photography because it lets us hold onto moments that disappear in seconds. Standing beneath mountains, watching wildlife, exploring remote places... those experiences deserve more than another forgotten image on a phone.\n\nSomewhere along the way I realized something: thousands of incredible photographs are taken every day, but almost none of them ever become real prints.\n\nBANGERS changes that.\n\nEvery quarter I release a single photograph. That’s it. No massive catalog. No unlimited downloads. Just one image I believe deserves a permanent place on your wall.',
   founder_video_heading: 'Come behind the lens',
   founder_youtube_url: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
+  founder_camera_label: 'Camera',
+founder_lens_label: 'Lens',
+founder_drone_label: 'Drone',
+founder_printing_label: 'Printing',
   founder_camera: 'Sony A7 IV',
   founder_lens: 'Sony 24–70mm GM II',
   founder_drone: 'DJI Mini Series',
