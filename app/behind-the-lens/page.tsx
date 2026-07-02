@@ -171,8 +171,6 @@ export default async function FounderPage() {
 
   <div className="relative max-w-5xl mx-auto text-center">
 
-    <p className="uppercase tracking-[0.45em] text-amber-300 text-sm mb-8">
-      The Philosophy
     </p>
 
     <h2 className="text-6xl md:text-8xl font-extralight leading-none mb-16">
