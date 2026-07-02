@@ -150,11 +150,11 @@ export default async function FounderPage() {
 
           <div className="grid md:grid-cols-4 gap-8 text-center">
             {[
-              ['Camera', content.founder_camera],
-              ['Lens', content.founder_lens],
-              ['Drone', content.founder_drone],
-              ['Printing', content.founder_printing],
-            ].map(([label, value]) => (
+  [content.founder_camera_label, content.founder_camera],
+  [content.founder_lens_label, content.founder_lens],
+  [content.founder_drone_label, content.founder_drone],
+  [content.founder_printing_label, content.founder_printing],
+].map(([label, value]) => (
               <div key={label} className="border border-white/10 rounded-[2rem] p-8 bg-neutral-950">
                 <p className="uppercase tracking-[0.25em] text-neutral-500 text-xs mb-4">
                   {label}
