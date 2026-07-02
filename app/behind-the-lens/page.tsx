@@ -176,12 +176,6 @@ export default async function FounderPage() {
       {content.founder_manifesto_headline}
     </h2>
 
-    <div className="space-y-6 mb-20">
-
-      <div className="text-5xl md:text-7xl font-extralight">
-        {content.founder_manifesto_line_1}
-      </div>
-
       <div className="text-5xl md:text-7xl font-extralight">
         {content.founder_manifesto_line_2}
       </div>
