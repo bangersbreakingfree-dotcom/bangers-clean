@@ -121,6 +121,11 @@ export default function AdminPage() {
             <Text label="Founder Story" value={content.founder_story} onChange={(v) => field('founder_story', v)} />
             <Input label="Video Heading" value={content.founder_video_heading} onChange={(v) => field('founder_video_heading', v)} />
             <Input label="YouTube URL" value={content.founder_youtube_url} onChange={(v) => field('founder_youtube_url', v)} />
+            <Input
+  label="Camera Label"
+  value={content.founder_camera_label}
+  onChange={(v) => field('founder_camera_label', v)}
+/>
             <Input label="Camera" value={content.founder_camera} onChange={(v) => field('founder_camera', v)} />
             <Input label="Lens" value={content.founder_lens} onChange={(v) => field('founder_lens', v)} />
             <Input label="Drone" value={content.founder_drone} onChange={(v) => field('founder_drone', v)} />
