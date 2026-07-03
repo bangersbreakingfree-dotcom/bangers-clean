@@ -82,9 +82,10 @@ export default async function FounderPage() {
 
       <section className="grid lg:grid-cols-2 border-y border-white/10">
         <div
-  className="min-h-[650px] bg-cover bg-center"
+  className="min-h-[650px] bg-cover bg-no-repeat"
   style={{
     backgroundImage: `url(${content.founder_portrait_url || content.founder_image_url})`,
+    backgroundPosition: "center 20%",
   }}
 />
 
