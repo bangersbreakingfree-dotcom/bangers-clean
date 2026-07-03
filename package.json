@@ -15,6 +15,7 @@
     "stripe": "17.5.0"
   },
   "devDependencies": {
+    "@vercel/analytics": "latest",
     "@types/node": "22.10.2",
     "@types/react": "18.3.18",
     "@types/react-dom": "18.3.5",
