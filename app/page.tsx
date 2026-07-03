@@ -419,9 +419,10 @@ const enrollmentCloses = 'March 15, 2026';
 
       <section className="relative py-40 overflow-hidden border-t border-white/10">
   <div
-    className="absolute inset-0 bg-cover bg-center opacity-25"
-    style={{ backgroundImage: `url(${content.founder_image_url})` }}
-  />
+  className="absolute inset-0 bg-cover bg-[center_25%] opacity-25"
+  style={{ backgroundImage: `url(${content.founder_image_url})` }}
+/>
+      
 
   <div className="absolute inset-0 bg-gradient-to-t from-black via-black/80 to-black/70" />
 
