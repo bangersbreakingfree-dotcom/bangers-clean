@@ -108,7 +108,7 @@ const enrollmentCloses = 'March 15, 2026';
     )}
 
     <a
-  href="#membership"
+  href="/account"
   onClick={() => setMobileMenuOpen(false)}
   className="border border-white/20 px-5 py-2 rounded-xl hover:bg-white hover:text-black transition"
 >
