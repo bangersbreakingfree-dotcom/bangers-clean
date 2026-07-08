@@ -34,6 +34,11 @@ export async function GET() {
       let postalCode = '';
       let country = '';
 
+      let subscriptionStatus = subscriber.subscription_status;
+      let planName = subscriber.plan_name;
+      let printSize = subscriber.print_size;
+      let currentPeriodEnd = subscriber.current_period_end;
+
       if (subscriber.stripe_customer_id) {
         try {
           const customer = await stripe.customers.retrieve(subscriber.stripe_customer_id);
@@ -47,13 +52,44 @@ export async function GET() {
             postalCode = customer.shipping?.address?.postal_code || '';
             country = customer.shipping?.address?.country || '';
           }
+
+          const subscriptions = await stripe.subscriptions.list({
+            customer: subscriber.stripe_customer_id,
+            status: 'all',
+            limit: 1,
+            expand: ['data.items.data.price'],
+          });
+
+          const subscription = subscriptions.data[0];
+
+          if (subscription) {
+            subscriptionStatus = subscription.status;
+            currentPeriodEnd = new Date(
+              subscription.current_period_end * 1000
+            ).toISOString();
+
+            const price = subscription.items.data[0]?.price;
+            planName =
+              price?.nickname ||
+              price?.metadata?.plan_name ||
+              price?.metadata?.tier ||
+              subscriber.plan_name;
+
+            printSize =
+              price?.metadata?.print_size ||
+              subscriber.print_size;
+          }
         } catch (error) {
-          console.error('Unable to load Stripe customer', subscriber.stripe_customer_id, error);
+          console.error('Unable to load Stripe data', subscriber.stripe_customer_id, error);
         }
       }
 
       return {
         ...subscriber,
+        subscription_status: subscriptionStatus,
+        plan_name: planName,
+        print_size: printSize,
+        current_period_end: currentPeriodEnd,
         customer_name: customerName,
         address_line1: addressLine1,
         address_line2: addressLine2,
