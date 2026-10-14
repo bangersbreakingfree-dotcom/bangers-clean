@@ -82,6 +82,7 @@ const enrollmentCloses = 'March 15, 2026';
       <a href="#experience" className="hover:text-white transition">Experience</a>
       <a href="#faq" className="hover:text-white transition">FAQ</a>
       <a href="/gallery">Gallery</a>
+      <a href="/journal" className="hover:text-white transition">Journal</a>
       <a href="/account" className="hover:text-white transition">Account</a>
     </nav>
 
@@ -102,6 +103,7 @@ const enrollmentCloses = 'March 15, 2026';
 <a href="#experience" onClick={() => setMobileMenuOpen(false)}>Experience</a>
 <a href="#faq" onClick={() => setMobileMenuOpen(false)}>FAQ</a>
 <a href="/gallery" onClick={() => setMobileMenuOpen(false)}>Gallery</a>
+          <a href="/journal" onClick={() => setMobileMenuOpen(false)}>Journal</a>
 <a href="/account" onClick={() => setMobileMenuOpen(false)}>Account</a>
         </div>
       </div>
