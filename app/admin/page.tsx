@@ -60,6 +60,12 @@ export default function AdminPage() {
         <h1 className="text-5xl md:text-7xl font-extralight mb-6">
           Update your site.
         </h1>
+        <a
+  href="/admin/journal"
+  className="inline-block mb-8 bg-white text-black px-6 py-3 rounded-xl font-medium hover:bg-neutral-200 transition"
+>
+  Manage Journal →
+</a>
 
         <form onSubmit={save} className="space-y-8">
           <div className="bg-neutral-950 border border-white/10 rounded-[2rem] p-8">
