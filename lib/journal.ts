@@ -3,7 +3,8 @@ export type StoryBlock =
   | { type: 'paragraph'; text: string }
   | { type: 'heading'; text: string }
   | { type: 'image'; src: string; alt: string; caption: string }
-  | { type: 'pair'; photos: { src: string; alt: string }[]; caption: string };
+  | { type: 'pair'; photos: { src: string; alt: string }[]; caption: string }
+  | { type: 'video'; url: string; caption: string };
 
 export type Recommendation = {
   category: 'See & Do' | 'Stay' | 'Eat & Drink' | 'Photography' | 'Other';

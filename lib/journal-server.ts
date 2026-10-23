@@ -2,6 +2,7 @@ import { createHmac, timingSafeEqual } from 'node:crypto';
 import { cookies } from 'next/headers';
 import type { JournalInput, JournalPost, StoryBlock } from './journal';
 import { isExternalLink } from './journal';
+import { parseJournalVideoUrl } from './journal-video';
 
 const COOKIE = 'bangers_journal_admin';
 
@@ -129,6 +130,14 @@ export function validateJournalInput(raw: unknown): JournalInput {
     if (b.type === 'image') {
       if (typeof b.src !== 'string' || (b.src ? !ownedPhoto(b.src) : status === 'published')) throw new Error('Upload story images to the Journal bucket');
       return { type: 'image', src: b.src, alt: String(b.alt || '').slice(0, 250), caption: String(b.caption || '').slice(0, 300) };
+    }
+    if (b.type === 'video') {
+      if (typeof b.url !== 'string' || b.url.length > 500) throw new Error('Invalid video link');
+      const url = b.url.trim();
+      if ((status === 'published' && !url) || (url && !parseJournalVideoUrl(url))) {
+        throw new Error('Use a valid YouTube or Vimeo video link before publishing');
+      }
+      return { type: 'video', url, caption: String(b.caption || '').slice(0, 300) };
     }
     if (b.type === 'pair') {
       if (!Array.isArray(b.photos) || b.photos.length !== 2) throw new Error('Paired photo blocks need two photos');
