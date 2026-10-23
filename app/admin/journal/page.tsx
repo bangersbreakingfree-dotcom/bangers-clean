@@ -3,6 +3,8 @@
 import { useCallback, useEffect, useState, type FormEvent } from 'react';
 import type { JournalInput, JournalPost, Recommendation, StoryBlock } from '@/lib/journal';
 import { blankJournalPost, slugify } from '@/lib/journal';
+import { parseJournalVideoUrl } from '@/lib/journal-video';
+import { JournalVideoEmbed } from '@/components/journal/VideoEmbed';
 
 const inputClass = 'w-full rounded-lg border border-white/15 bg-neutral-950 px-4 py-3 text-white placeholder:text-neutral-600 focus:border-white/50 focus:outline-none';
 const buttonClass = 'rounded-lg border border-white/20 px-4 py-2 text-sm transition hover:border-white/50 hover:bg-white/10 disabled:opacity-40';
@@ -209,6 +211,9 @@ export default function JournalAdminPage() {
             ? <p key={i} className="whitespace-pre-line text-lg leading-9 text-neutral-300">{b.text}</p>
             : b.type === 'heading' ? <h3 key={i} className="text-3xl font-light">{b.text}</h3>
             : b.type === 'image' ? <figure key={i}><img src={b.src} alt={b.alt} className="w-full rounded-lg" /><figcaption className="text-center text-sm text-neutral-500">{b.caption}</figcaption></figure>
+            : b.type === 'video' ? <div key={i}>{parseJournalVideoUrl(b.url)
+              ? <JournalVideoEmbed url={b.url} caption={b.caption} />
+              : <p className="text-sm text-amber-300">Add a valid YouTube or Vimeo URL to preview the video.</p>}</div>
             : <div key={i} className="grid grid-cols-2 gap-3">{b.photos.filter(p => p.src).map((p, j) => <img key={j} src={p.src} alt={p.alt} className="w-full rounded-lg" />)}</div>)}
           </div>
           <div className="mt-12 border-t border-white/15 pt-8"><h3 className="mb-5 text-2xl">My recommendations</h3>
@@ -236,7 +241,7 @@ export default function JournalAdminPage() {
 
           <section className="space-y-5 rounded-xl border border-white/10 p-6">
             <h2 className="text-xl font-light">3. Tell your story</h2>
-            <p className="text-sm leading-6 text-neutral-400">Add text, headings, and photos in any order. Use the arrows to move a section.</p>
+            <p className="text-sm leading-6 text-neutral-400">Add text, headings, photos, and videos in any order. Use the arrows to move a section.</p>
             {form.blocks.map((b, index) => <div key={index} className="rounded-lg border border-white/10 bg-neutral-950 p-4">
               <div className="mb-4 flex flex-wrap items-center gap-2">
                 <span className="mr-auto text-xs uppercase tracking-[.2em] text-neutral-500">{index + 1} · {b.type}</span>
@@ -252,6 +257,17 @@ export default function JournalAdminPage() {
                 <EditorField label="Photo description" value={b.alt} onChange={alt => changeBlock(index, { ...b, alt })} />
                 <EditorField label="Caption (optional)" value={b.caption} onChange={caption => changeBlock(index, { ...b, caption })} />
               </div>}
+              {b.type === 'video' && <div className="space-y-4">
+                <EditorField label="YouTube or Vimeo video link" value={b.url}
+                  onChange={url => changeBlock(index, { ...b, url })}
+                  placeholder="https://www.youtube.com/watch?v=..." />
+                <p className="text-xs text-neutral-500">Paste a video link (including YouTube Shorts). No embed code or uploads needed.</p>
+                {b.url && (parseJournalVideoUrl(b.url)
+                  ? <JournalVideoEmbed url={b.url} />
+                  : <p className="text-sm text-amber-300">This link is not supported. Use a public YouTube or Vimeo URL.</p>)}
+                <EditorField label="Video caption (optional)" value={b.caption}
+                  onChange={caption => changeBlock(index, { ...b, caption })} />
+              </div>}
               {b.type === 'pair' && <div className="space-y-4">
                 <div className="grid gap-5 md:grid-cols-2">{b.photos.map((p, photoIndex) => <div key={photoIndex} className="space-y-3">
                   {p.src && <img src={p.src} alt={p.alt} className="aspect-[4/5] w-full rounded-lg object-cover" />}
@@ -266,6 +282,7 @@ export default function JournalAdminPage() {
               <button className={buttonClass} onClick={() => patch('blocks', [...form.blocks, { type: 'heading', text: '' }])}>+ Heading</button>
               <button className={buttonClass} onClick={() => patch('blocks', [...form.blocks, { type: 'image', src: '', alt: '', caption: '' }])}>+ Photo</button>
               <button className={buttonClass} onClick={() => patch('blocks', [...form.blocks, { type: 'pair', photos: [{ src: '', alt: '' }, { src: '', alt: '' }], caption: '' }])}>+ Two photos</button>
+              <button className={buttonClass} onClick={() => patch('blocks', [...form.blocks, { type: 'video', url: '', caption: '' }])}>+ Video</button>
             </div>
           </section>
 

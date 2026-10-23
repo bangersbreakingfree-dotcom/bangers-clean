@@ -3,6 +3,7 @@ import { notFound } from 'next/navigation';
 import type { Metadata } from 'next';
 import { getJournalPost } from '@/lib/journal-server';
 import type { JournalPost, StoryBlock } from '@/lib/journal';
+import { JournalVideoEmbed } from '@/components/journal/VideoEmbed';
 
 export const dynamic = 'force-dynamic';
 type Props = { params: { slug: string } };
@@ -28,6 +29,7 @@ export function StoryContent({ blocks }: { blocks: StoryBlock[] }) {
         <img src={b.src} alt={b.alt || 'Travel photograph'} className="w-full rounded-lg" loading="lazy" />
         {b.caption && <figcaption className="pt-3 text-center text-sm text-neutral-500">{b.caption}</figcaption>}
       </figure>;
+      if (b.type === 'video') return <JournalVideoEmbed key={index} url={b.url} caption={b.caption} className="md:-mx-16" />;
       if (b.type === 'pair') return <figure key={index} className="-mx-0 md:-mx-16">
         <div className="grid grid-cols-2 gap-3">{b.photos.map((p, i) => <img key={i} src={p.src} alt={p.alt || 'Travel photograph'} loading="lazy" className="h-full w-full rounded-lg object-cover" />)}</div>
         {b.caption && <figcaption className="pt-3 text-center text-sm text-neutral-500">{b.caption}</figcaption>}
